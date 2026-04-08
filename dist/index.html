@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/pga/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <meta name="theme-color" content="#054f77" />
+    <meta name="description" content="PGA - Grupo Alyne - Ferramenta do Representante" />
+    <link rel="apple-touch-icon" href="/pga/logo192.png" />
+    <link rel="manifest" href="/pga/manifest.json" />
+    <link rel="canonical" href="https://pga.cigel.com.br/pga/" />
+    <link rel="preload" as="image" href="assets/BANNERUSUARIOHOME.png" media="(min-width: 1281px)" />
+    <link rel="preload" as="image" href="assets/BANNERUSUARIOHOMEMOB.png" media="(max-width: 1280px)" />
+    <title>Portal - Grupo Alyne</title>
+    <script>
+      const isLocalhost =
+        location.hostname === 'localhost' ||
+        location.hostname === '127.0.0.1' ||
+        location.hostname === '[::1]';
+
+      if ('serviceWorker' in navigator && !isLocalhost) {
+        window.addEventListener('load', () => {
+          // Adicionando versão para garantir atualização do cache do navegador para o arquivo sw.js
+          navigator.serviceWorker.register('/pga/pwabuilder-sw.js?v=85')
+            .then(registration => {
+              console.log('Service Worker registered:', registration);
+              try {
+                registration.update();
+                if (registration.waiting) {
+                  registration.waiting.postMessage({ type: 'ACTIVATE_NEW_SW' });
+                }
+              } catch (e) {}
+              
+              // Verifica atualizações
+              registration.onupdatefound = () => {
+                const installingWorker = registration.installing;
+                if (installingWorker) {
+                  installingWorker.onstatechange = () => {
+                    if (installingWorker.state === 'installed') {
+                      if (navigator.serviceWorker.controller) {
+                        // Nova versão disponível
+                        console.log('New content is available; please refresh.');
+                        try {
+                          if (registration.waiting) {
+                            registration.waiting.postMessage({ type: 'ACTIVATE_NEW_SW' });
+                          }
+                        } catch (e) {}
+                      } else {
+                        console.log('Content is cached for offline use.');
+                      }
+                    }
+                  };
+                }
+              };
+            })
+            .catch(error => {
+              console.log('Service Worker registration failed:', error);
+            });
+        });
+
+        let refreshing;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          if (refreshing) return;
+          refreshing = true;
+        });
+      }
+    </script>
+    <script type="module" crossorigin src="/pga/assets/index-gUxmW3ax.js"></script>
+    <link rel="stylesheet" crossorigin href="/pga/assets/index-pr3be-PD.css">
+  </head>
+  <body>
+    <style>
+      @media (max-width: 1280px) {
+        #reload-splash {
+          justify-content: flex-start !important;
+          padding-top: 160px !important;
+        }
+        #reload-splash h1 {
+          margin-top: 10px !important;
+        }
+      }
+    </style>
+    <noscript>Você precisa habilitar o JavaScript para executar esta aplicação.</noscript>
+    <div id="reload-splash" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#054f77;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;">
+      <img src="assets/logo-light.png" alt="Alyne" style="width:220px;height:auto;" />
+      <h1 style="color:#fff;margin-top:24px;font-size:20px;">Atualizando...</h1>
+    </div>
+    <div id="root"></div>
+    <script>
+      window.addEventListener('load', () => {
+        const splash = document.getElementById('reload-splash');
+        if (splash) splash.style.display = 'none';
+      });
+    </script>
+  </body>
+</html>

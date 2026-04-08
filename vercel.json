@@ -1,0 +1,24 @@
+{
+  "installCommand": "npm install --legacy-peer-deps",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "redirects": [
+    { "source": "/", "destination": "/pga/", "permanent": false }
+  ],
+  "rewrites": [
+    { "source": "/pga/assets/(.*)", "destination": "/assets/$1" },
+    { "source": "/pga/manifest.json", "destination": "/manifest.json" },
+    { "source": "/pga/favicon.ico", "destination": "/favicon.ico" },
+    { "source": "/pga/logo192.png", "destination": "/logo192.png" },
+    { "source": "/pga/pwabuilder-sw.js", "destination": "/pwabuilder-sw.js" },
+    { "source": "/pga/offline.html", "destination": "/offline.html" },
+    { "source": "/pga/VersoesFront.json", "destination": "/VersoesFront.json" },
+    {
+      "source": "/pga/android-launchericon-512-512.png",
+      "destination": "/android-launchericon-512-512.png"
+    },
+    { "source": "/pga/splash-image.png", "destination": "/splash-image.png" },
+    { "source": "/pga", "destination": "/index.html" },
+    { "source": "/pga/(.*)", "destination": "/index.html" }
+  ]
+}

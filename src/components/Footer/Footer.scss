@@ -1,0 +1,132 @@
+@import url('https://fonts.cdnfonts.com/css/avenir');
+.content-footer{
+    padding-left: 80px !important;
+    padding: 10px;
+    height:auto;
+    display: flex;
+    background-image: linear-gradient(-57deg,#17529e 0,#132338 100%);
+    color: aliceblue;
+    @media(max-width:1280px) {
+        display: none;
+     padding-left: 10px !important;
+     flex-direction: column;
+    }
+    .social{
+        display: flex;
+     
+        a{
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            margin: 0 20px;
+            justify-content: center;
+            border-radius: 50%;
+            background: #fff;
+            color: #1f3956;
+        }
+        a:hover{
+            background: #1f3956;
+            text-decoration: none!important;
+            color: aliceblue;
+        }
+       
+        
+    }
+    @media(max-width:420px) {
+        justify-content: center !important;
+        .social{
+            margin-left: 25px;
+        }
+    }
+    @media(max-width:380px) {
+        justify-content: center !important;
+        .social{
+            margin-left: 5px;
+        }
+    }
+  
+}
+.portal-footer{
+    margin-left: 20px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    margin-top: 10px !important;
+    text-align: center !important;
+}
+.Informacoes{
+    text-align: center;
+    margin: auto;
+    align-items: center;
+    width: 500px;
+display: flex;
+@media(max-width:1280px) {
+    width: 100%;
+    h1{
+        font-size: 8px !important;
+        text-align: center;
+        margin-left: 0 !important;
+    }
+    justify-content: space-between; 
+}
+}
+
+.content-footer-mobile{
+    display: none;
+    position: fixed !important;
+    @media(max-width:1280px) {
+        border-top: 1px solid #1f3956;
+     height:60px !important;
+     position: fixed !important; 
+     bottom: 0; 
+     width: 100% !important; 
+     display: flex; 
+     justify-content:space-between;
+     align-items: center; 
+     background-color: #fff;
+     padding: 10px;
+     z-index: 920;
+    
+    }
+    .botoes-nav-inferior{
+        width: 50px;
+        height: 50px;
+        border-radius: 5px;
+        padding-top: 3px;
+        align-items: center;
+        text-align: center;
+        background-color: #fff;
+        color: #132338;
+        text-decoration: none !important;
+    }
+    .botoes-nav-inferior:active{
+      
+        background-color: #17529e;
+        color: #fff;
+    }
+    .botoes-nav-inferior-active{
+        width: 50px;
+        height: 50px;
+        border-radius: 5px;
+        padding-top: 3px;
+        align-items: center;
+        text-align: center;
+        background-color: #17529e;
+        color: #fff;
+        text-decoration: none !important;
+    }
+    h1{
+        font-size: 11px !important;
+    }
+  
+}
+.botoes-nav-inferior-off{
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+    padding-top: 3px;
+    align-items: center;
+    text-align: center;
+    background-color: #9b9696;
+    color: #132338;
+    text-decoration: none !important;
+}

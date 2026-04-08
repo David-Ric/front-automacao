@@ -1,0 +1,242 @@
+@use '../../../styles/colors.scss' as *;
+
+#sidebar {
+  height: 100% !important;
+  width: 272px;
+  position: absolute;
+  left: 0;
+  top: 100;
+  z-index: 100;
+  background: $black;
+  color: #fff;
+  transition: width 500ms;
+  @media (max-width: 1280px) {
+    width: 96px;
+    left: -100%;
+  }
+  .sidebar-header {
+    height: 60px;
+    padding: 0rem 1rem;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    .brand {
+      img {
+        fill: #fff;
+      }
+    }
+  }
+  .sidebar-menu {
+    position: absolute !important;
+    z-index: 1000 !important;
+    padding: 1rem 0;
+    ul {
+      text-decoration: none;
+      list-style-type: none;
+      padding: 0;
+      li {
+        padding: 1rem;
+        &:hover {
+          background-color: #4bb7f1;
+          a {
+            color: $bg-white;
+          }
+        }
+        a {
+          text-decoration: none;
+          color: $gray-2;
+          font-size: 0.9rem;
+          span {
+            &:last-child {
+              padding-left: 0.6rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+#sidebar-toogle {
+  &:checked {
+    ~ {
+      .sidebar {
+        .sidebar-header {
+          display: flex;
+          justify-content: center;
+        }
+      }
+      .sidebar {
+        li {
+          display: flex;
+          justify-content: center;
+          a {
+            @media (max-width: 1280px) {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              font-size: 12px;
+            }
+            span {
+              &:last-child {
+                display: none;
+                @media (max-width: 1280px) {
+                  display: block;
+                  text-align: center;
+                  padding: 0;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .main-content {
+        margin-left: 96px;
+      }
+    }
+  }
+}
+
+.main-content {
+  position: relative;
+  margin-left: 272px;
+  transition: margin-left 500ms;
+  @media (max-width: 1280px) {
+    margin: 0;
+    margin-left: 0px;
+  }
+}
+#sidebar-toogle {
+  display: none;
+}
+.arrow-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $black;
+  border-radius: 50px;
+  position: absolute;
+  width: 48px;
+  height: 32px;
+  right: -22px;
+  z-index: 100;
+  border: 2px solid $white;
+  svg {
+    fill: $white;
+  }
+  @media (max-width: 1280px) {
+    display: none;
+  }
+}
+
+.buttonUpdate {
+  margin-top: 20px;
+  border: 1px solid #adadad;
+  background-color: white;
+  padding: 8px 16px;
+  border-radius: 50px;
+  color: #adadad;
+}
+//menu toggle=======================================
+.iconMenu {
+  display: none;
+}
+.iconMenu {
+  @media (max-width: 1280px) {
+    display: block;
+    z-index: 4;
+    width: fit-content;
+    height: 25px;
+    cursor: pointer;
+    &.iconActive {
+      .hamburguerD {
+        background: transparent;
+        &::after {
+          top: 0;
+          background: #6d6c6c;
+          transform: rotate(225deg);
+        }
+        &::before {
+          top: 0;
+          background: #6d6c6c;
+          transform: rotate(135deg);
+        }
+      }
+    }
+    .hamburguerD {
+      top: 50%;
+      right: 5%;
+      width: 25px;
+      height: 3px;
+      background: rgb(255, 255, 255);
+      position: absolute;
+      transition: 0.5s;
+      &::before {
+        top: -9px;
+        content: '';
+        position: absolute;
+        width: 25px;
+        height: 3px;
+        background: rgb(255, 255, 255);
+        transition: 0.5s;
+      }
+      &::after {
+        top: 9px;
+        content: '';
+        position: absolute;
+        width: 25px;
+        height: 3px;
+        background: rgb(255, 255, 255);
+        transition: 0.5s;
+      }
+    }
+  }
+}
+MUDANÇA DE PADDING E SHADOW ENAVBAR COLLAPSE #menuDark {
+  @media (max-width: 1280px) {
+    padding: 20px;
+    flex-basis: 100%;
+    background-color: #000;
+    flex-grow: 1;
+    align-items: center;
+    box-shadow: 6px 15px 30px -20px;
+    width: 94%;
+    position: absolute;
+    top: 96px;
+    border-top: solid 2px #e0dede;
+    z-index: 1000;
+  }
+}
+#navbarMenuD {
+  background-color: rgb(46, 45, 45);
+  z-index: 1000;
+  align-items: center;
+}
+
+.login {
+  @media (max-width: 820px) {
+    padding-left: 0 !important;
+  }
+}
+.menuFotos {
+  background-color: rgb(70, 69, 69);
+  transition: 1s;
+}
+.botaoFotos {
+  span {
+    text-decoration: none;
+    color: #c7c7c7;
+    font-size: 0.9rem;
+    margin-right: 10px;
+    cursor: pointer;
+  }
+}
+.botaoFotos:hover {
+  .text {
+    color: #fff !important;
+  }
+}
+.menuSumir {
+  display: none;
+  transition: 1s;
+}

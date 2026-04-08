@@ -1,0 +1,232 @@
+@import url('https://fonts.cdnfonts.com/css/avenir');
+
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@500&display=swap');
+
+.content-home {
+  // font-family: 'Unbounded', cursive;
+  width: 100%;
+  padding-top: 100px;
+  min-height: 800px;
+  background-color: #054f77;
+  height: auto !important;
+  flex-direction: column;
+  align-items: center;
+  display: flex;
+  @media (max-width: 1280px) {
+    padding: 0;
+    min-height: 100vh;
+  }
+  .contentrec {
+    position: relative;
+    width: 100%;
+    min-height: 850px;
+    padding-left: 80px;
+    padding-right: 80px;
+    justify-content: flex-end;
+    align-items: center;
+    display: flex;
+    background-color: #edeee9;
+    .logo-recuperar {
+      width: 600px;
+      height: 420px;
+      background-image: url('../../assets/RecuperarSenha.png');
+      background-size: 70%;
+      background-repeat: no-repeat, repeat;
+      margin-bottom: 180px;
+    }
+    .logo-redefinir {
+      width: 600px;
+      height: 420px;
+      background-image: url('../../assets/redefinir.png');
+      background-size: 70%;
+      background-repeat: no-repeat, repeat;
+      margin-bottom: 180px;
+    }
+    @media (max-width: 1280px) {
+      padding-left: 10px;
+      padding-right: 10px;
+      justify-content: center;
+      //background-image: url("../../assets/fundo-mobile.png");
+      min-height: 1020px;
+    }
+    @media (max-width: 1280px) {
+      padding-left: 10px;
+      padding-right: 10px;
+      justify-content: center;
+      min-height: 700px;
+      .logo-recuperar {
+        display: none;
+      }
+      .logo-redefinir {
+        display: none;
+      }
+    }
+    @media (max-width: 1280px) {
+      padding-left: 10px;
+      padding-right: 10px;
+      justify-content: center;
+      min-height: 750px;
+    }
+  }
+  h2 {
+    font-size: 30px;
+    color: aliceblue;
+  }
+}
+.menu-mob {
+  display: flex;
+  a {
+    h2 {
+      color: gold !important;
+    }
+    text-decoration: none;
+  }
+  @media (min-width: 900px) {
+    display: none;
+  }
+}
+.submenu {
+  justify-content: center;
+  margin-top: 30px;
+  h2 {
+    color: gold !important;
+    font-size: 20px;
+  }
+  span {
+    font-size: 15px;
+  }
+}
+.container-login {
+  justify-content: center !important;
+  align-items: center;
+  width: 400px;
+  height: 480px;
+  background-color: #fff;
+  margin-bottom: 170px;
+  // margin-right: 40px;
+  padding: 25px;
+  box-shadow: 0 4px 8px 1px #121213;
+  @media (max-width: 850px) {
+    width: 60%;
+  }
+  @media (max-width: 1280px) {
+    width: 90%;
+    max-width: 500px;
+  }
+}
+.bloco-login {
+  text-align: center;
+  align-items: center;
+  padding-top: 30px;
+  padding-bottom: 20px;
+  width: 350px;
+  height: auto !important;
+  margin-bottom: 190px;
+  margin-right: 100px;
+  background-color: #f0f3fb;
+  box-shadow: 0 4px 8px 1px #121213;
+  border-radius: 5px;
+  .text-btn {
+    justify-content: center !important;
+    text-align: center !important;
+  }
+  @media (max-width: 850px) {
+    width: 60%;
+    .labelform {
+     // margin-left: 33px !important;
+    }
+  }
+  @media (max-width: 1280px) {
+    width: 100%;
+    margin-right: 0px;
+    // max-width: 500px;
+    margin: 0px;
+    min-height: 100vh;
+    border-radius: 0%;
+    padding-top: 70px;
+    background-color: #00588b;
+    .labelform {
+      margin-left: 100px;
+    }
+  }
+  @media (max-width: 800px) {
+    width: 100%;
+    margin-right: 0px;
+    // max-width: 500px;
+    margin: 0px;
+    min-height: 100vh;
+    border-radius: 0%;
+    padding-top: 70px;
+    background-color: #00588b;
+  }
+}
+
+.labelform {
+  // position: absolute;
+  cursor: text;
+  font-size: 80%;
+  font-family: 'Nunito', sans-serif;
+  opacity: 1;
+  top: -0.4em;
+  left: 0.75rem;
+  z-index: 100;
+  line-height: 1;
+  padding: 0 5px 5px;
+}
+
+.btn-enviar {
+  margin-top: 30px;
+  width: 260px;
+  padding: 15px;
+  border-radius: 50px;
+  background: linear-gradient(0deg, #054f77 0%, #4ea1cf 100%);
+  color: aliceblue;
+  @media (max-width: 290px) {
+    width: 170px;
+  }
+}
+.btn-enviar:hover {
+  background: linear-gradient(0deg, #033049 0%, #2f7aa2 100%);
+  color: aliceblue;
+}
+.register-link {
+  margin-left: auto !important;
+  text-align: center;
+  width: 80%;
+  margin-top: 20px;
+  font-size: 13px;
+  line-height: 20px;
+  @media (max-width: 790px) {
+    margin-top: 20px !important;
+    //  margin-left: 35px !important;
+  }
+  a {
+    @media (max-width: 1280px) {
+      color: #f0f3fb !important;
+      font-size: 18px !important;
+      text-decoration: none !important;
+    }
+  }
+  @media (max-width: 1280px) {
+    margin-top: 50px;
+    color: #f0f3fb !important;
+    font-size: 20px !important;
+    text-decoration: none !important;
+    margin-left: 85px;
+  }
+}
+.labelform {
+  text-transform: lowercase;
+}
+.usuario-logado {
+  cursor: pointer;
+
+  @media (max-width: 1280px) {
+    font-size: 13px !important;
+  }
+  span {
+    @media (max-width: 1280px) {
+      font-size: 13px !important;
+    }
+  }
+}

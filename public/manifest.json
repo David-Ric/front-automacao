@@ -1,0 +1,22 @@
+{
+  "short_name": "pgamobile 1.1.056",
+  "name": "pgamobile 1.1.056",
+  "icons": [
+    {
+      "src": "./android-launchericon-512-512.png",
+      "sizes": "512x512 64x64 32x32 24x24 16x16",
+      "type": "image/png"
+    }
+   
+  ],
+  "start_url": "/pga",
+  "display": "standalone",
+  "theme_color": "#054f77",
+  "background_color": "#054f77",
+  "description": "Ferramenta criada para gerenciamento de vendas do grupo Cigel",
+  "lang": "pt",
+  "orientation": "any",
+  "categories": [
+    "shopping"
+  ]
+}

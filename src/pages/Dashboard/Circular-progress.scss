@@ -1,0 +1,425 @@
+:root {
+  --cor-bg-princ: brown;
+}
+
+#barra-circular {
+  width: 180px !important;
+  height: 180px !important;
+  border-radius: 50% !important;
+  box-shadow: 1px 3px 4px #b4aeae;
+  margin-bottom: 10px;
+
+  &::before {
+    align-items: center;
+    background: #ffffff;
+    border-radius: 50%;
+    display: inline-flex;
+    font-size: 400%;
+    height: 100%;
+    justify-content: center;
+    transform: scale(0.8);
+    width: 100%;
+
+    @media (max-width: 1280px) {
+      font-size: 200%;
+    }
+  }
+
+  @media (max-width: 1280px) {
+    width: 100px !important;
+    height: 100px !important;
+  }
+}
+
+.circular-progress {
+  display: block;
+  @for $i from 0 through 100 {
+    $deg: 90deg+ (3.6 * $i);
+
+    &--#{$i} {
+      $cores: blue;
+      $direction: if(sass($i < 51): right; else: left);
+      $color: if(sass($i < 51): #d0e2f1; else: rgb(255, 115, 77));
+
+      background: linear-gradient(
+          to #{$direction},
+          #{$color} 50%,
+          transparent 50%
+        ),
+        linear-gradient(#{$deg}, rgb(255, 115, 77) 50%, #d0e2f1 50%);
+
+      &::before {
+        content: '#{$i}%';
+      }
+    }
+  }
+}
+
+.circular-progress1 {
+  display: block;
+  @for $i from 0 through 100 {
+    $deg: 90deg+ (3.6 * $i);
+
+    &--#{$i} {
+      $cores: blue;
+      $direction: if(sass($i < 51): right; else: left);
+      $color: if(sass($i < 51): #d0e2f1; else: rgb(32, 201, 151));
+
+      background: linear-gradient(
+          to #{$direction},
+          #{$color} 50%,
+          transparent 50%
+        ),
+        linear-gradient(#{$deg}, rgb(32, 201, 151) 50%, #d0e2f1 50%);
+
+      &::before {
+        content: '#{$i}%';
+      }
+    }
+  }
+}
+
+.circular-progress2 {
+  display: block;
+  animation: 6s infinite;
+
+  @for $i from 0 through 100 {
+    $deg: 90deg+ (3.6 * $i);
+
+    &--#{$i} {
+      $cores: blue;
+      $direction: if(sass($i < 51): right; else: left);
+      $color: if(sass($i < 51): #d0e2f1; else: rgb(49, 140, 247));
+
+      background: linear-gradient(
+          to #{$direction},
+          #{$color} 50%,
+          transparent 50%
+        ),
+        linear-gradient(#{$deg}, rgb(49, 140, 247) 50%, #d0e2f1 50%);
+
+      &::before {
+        content: '#{$i}%';
+      }
+    }
+  }
+}
+
+.circular-progress3 {
+  display: block;
+  animation: progress-animation 6s infinite;
+
+  @for $i from 0 through 100 {
+    $deg: 90deg+ (3.6 * $i);
+
+    &--#{$i} {
+      $cores: blue;
+      $direction: if(sass($i < 51): right; else: left);
+      $color: if(sass($i < 51): #d0e2f1; else: rgb(255, 179, 15));
+
+      background: linear-gradient(
+          to #{$direction},
+          #{$color} 50%,
+          transparent 50%
+        ),
+        linear-gradient(#{$deg}, rgb(255, 179, 15) 50%, #d0e2f1 50%);
+
+      &::before {
+        content: '#{$i}%';
+      }
+    }
+  }
+}
+
+.card-total {
+  float: right !important;
+  align-items: center !important;
+  text-align: center !important;
+  padding: 10px;
+  padding-top: 5px;
+  width: 200px;
+  height: 100px;
+  background-color: #53b7fa;
+  background-clip: border-box;
+  border: 1px solid rgba(46, 46, 46, 0.125);
+  border-radius: 0.65rem;
+  box-shadow: 1px 3px 4px #b4aeae;
+  margin: 1rem;
+
+  span {
+    text-align: center !important;
+  }
+
+  .texto-cliente {
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 90%;
+    margin-bottom: 0;
+    height: 20px !important;
+  }
+
+  .texto-total {
+    font-size: 30px;
+    font-weight: bold;
+    margin: 0 !important;
+  }
+
+  @media (max-width: 1280px) {
+    .texto-cliente {
+      font-size: 15px;
+    }
+
+    .texto-total {
+      font-size: 20px;
+    }
+
+    margin: auto !important;
+    width: 200px;
+    height: 90px;
+  }
+}
+
+.card-total-clientes {
+  padding: 10px;
+  padding-top: 5px;
+  width: 30%;
+  background-color: #ffffff;
+  background-clip: border-box;
+  border: 1px solid rgba(46, 46, 46, 0.125);
+  border-radius: 0.65rem;
+  box-shadow: 1px 3px 4px #b4aeae;
+  margin: 1rem;
+  justify-content: center;
+
+  .texto-cliente {
+    margin-top: 10px;
+    font-size: 90%;
+    margin-bottom: 0;
+    height: 20px !important;
+    text-align: start;
+  }
+
+  .texto-total {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 !important;
+    color: #53b7fa;
+  }
+
+  .linha-total {
+    width: 100%;
+    height: auto;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 1280px) {
+    .texto-cliente {
+      font-size: 15px;
+    }
+
+    .texto-total {
+      font-size: 20px;
+    }
+
+    margin: auto !important;
+    width: 200px;
+    height: fit-content;
+  }
+}
+
+.card-div {
+  display: flex;
+  flex-direction: column;
+
+  .CircularProgressbar {
+    width: 70%;
+    margin-bottom: 10px;
+  }
+
+  cursor: pointer;
+  align-items: center !important;
+  text-align: center !important;
+  padding: 1rem;
+  min-width: 150px;
+  min-height: 150px;
+  max-width: 150px;
+  span {
+    text-align: center !important;
+    font-size: 13px;
+    color: #53b7fa;
+  }
+
+  @media (max-width: 1280px) {
+    padding: 25px;
+    min-width: 130px;
+    min-height: 130px;
+    max-width: 130px;
+
+    span {
+      font-size: 10px;
+    }
+    .CircularProgressbar {
+      width: 70%;
+      margin-bottom: 10px;
+    }
+  }
+
+  .display-flex {
+    display: flex;
+    align-items: center !important;
+  }
+}
+
+.div-dashboard-admin {
+  h4 {
+    width: 60% !important;
+  }
+
+  position: relative;
+  display: flex;
+  min-width: 0;
+  background-color: #ffffff;
+  background-clip: border-box;
+  border: 1px solid rgba(46, 46, 46, 0.125);
+  border-radius: 0.65rem;
+  .titulo {
+    h4 {
+      @media (max-width: 1280px) {
+        width: 100% !important;
+        font-size: 18px;
+        text-align: center;
+      }
+    }
+  }
+}
+
+.conteudo-div {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  .total-card-imovel {
+    margin-top: 135px;
+  }
+
+  .total-card-corretor {
+    margin-top: 135px;
+    margin-left: 26.5%;
+  }
+}
+
+.radio-status {
+  width: 15px;
+  height: 15px;
+  background-color: red;
+  border-radius: 50%;
+  margin-top: 4px !important;
+  margin-right: 5px !important;
+  margin-bottom: 0 !important;
+}
+
+.total-card-agenda {
+  margin-left: 77.5%;
+}
+
+.total-card-cliente {
+  margin-left: 77.5%;
+}
+
+.conteudo-text {
+  margin-top: 26px;
+  padding-left: 5px;
+  width: 205px;
+  text-align: left;
+  align-items: flex-start;
+  p {
+    font-size: 13px;
+  }
+}
+
+.texto-procent {
+  text-align: center;
+  width: 40px;
+  p {
+    font-size: 14px;
+    text-align: center !important;
+    font-weight: bold;
+  }
+}
+.circular-status {
+  width: 10px !important;
+  height: 10px !important;
+  margin-left: 3px;
+  margin-top: 4px;
+}
+.divisa-dash {
+  height: 4px;
+  background-color: rgb(240, 239, 239);
+  margin-bottom: 10px;
+  margin-top: 10px;
+  width: 100% !important;
+}
+.div-financeiraGeral-dash {
+  width: 100%;
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+}
+.total-barra {
+  @media (max-width: 1280px) {
+    width: 25%;
+  }
+}
+.total-imoveis-grafico {
+  font-size: 16px;
+  margin-top: 30px;
+  @media (max-width: 1280px) {
+    margin-top: 0px;
+    font-size: 12px;
+  }
+}
+#select-cidade {
+  @media (max-width: 1280px) {
+    width: 180px;
+  }
+}
+.div-valores-cota {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.CircularProgressbar .CircularProgressbar-trail {
+  stroke: #d6d6d6;
+  stroke-linecap: round;
+}
+.CircularProgressbar .CircularProgressbar-path {
+  stroke: #3e98c7;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.5s ease 0s;
+}
+
+.CircularProgressbar .CircularProgressbar-text {
+  fill: #3e98c7;
+  font-size: 20px;
+  dominant-baseline: middle;
+  text-anchor: middle;
+}
+.valortot {
+  text-align: center !important;
+  b {
+    color: #2211c1;
+  }
+}
+.valortotBlack {
+  color: #d6d6d6;
+  text-align: center !important;
+  b {
+    color: #3e98c7;
+  }
+}

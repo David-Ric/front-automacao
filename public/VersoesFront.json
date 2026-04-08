@@ -1,0 +1,519 @@
+[
+  {
+    "id": 1,
+    "Versão": "1.0.0",
+    "AtualizadoEm": "23/03/2023"
+  },
+  {
+    "id": 2,
+    "Versão": "1.0.1",
+    "AtualizadoEm": "03/04/2023"
+  },
+  {
+    "id": 3,
+    "Versão": "1.0.2",
+    "AtualizadoEm": "08/05/2023"
+  },
+  {
+    "id": 4,
+    "Versão": "1.0.3",
+    "AtualizadoEm": "18/05/2023"
+  },
+  {
+    "id": 5,
+    "Versão": "1.0.4",
+    "AtualizadoEm": "25/05/2023"
+  },
+  {
+    "id": 6,
+    "Versão": "1.0.5",
+    "AtualizadoEm": "29/05/2023"
+  },
+  {
+    "id": 7,
+    "Versão": "1.0.6",
+    "AtualizadoEm": "29/05/2023"
+  },
+  {
+    "id": 8,
+    "Versão": "1.0.7",
+    "AtualizadoEm": "30/05/2023"
+  },
+  {
+    "id": 9,
+    "Versão": "1.0.8",
+    "AtualizadoEm": "31/05/2023"
+  },
+  {
+    "id": 10,
+    "Versão": "1.0.9",
+    "AtualizadoEm": "01/06/2023"
+  },
+  {
+    "id": 11,
+    "Versão": "1.1.0",
+    "AtualizadoEm": "01/06/2023"
+  },
+  {
+    "id": 12,
+    "Versão": "1.1.001",
+    "AtualizadoEm": "01/06/2023"
+  },
+  {
+    "id": 13,
+    "Versão": "1.1.002",
+    "AtualizadoEm": "02/06/2023"
+  },
+  {
+    "id": 14,
+    "Versão": "1.1.003",
+    "AtualizadoEm": "13/06/2023"
+  },
+  {
+    "id": 15,
+    "Versão": "1.1.004",
+    "AtualizadoEm": "13/06/2023"
+  },
+  {
+    "id": 16,
+    "Versão": "1.1.005",
+    "AtualizadoEm": "15/06/2023"
+  },
+  {
+    "id": 17,
+    "Versão": "1.1.006",
+    "AtualizadoEm": "15/06/2023"
+  },
+  {
+    "id": 18,
+    "Versão": "1.1.007",
+    "AtualizadoEm": "19/06/2023"
+  },
+  {
+    "id": 18,
+    "Versão": "1.1.008",
+    "AtualizadoEm": "22/06/2023"
+  },
+  {
+    "id": 19,
+    "Versão": "1.1.008",
+    "AtualizadoEm": "28/06/2023"
+  },
+  {
+    "id": 20,
+    "Versão": "1.1.009",
+    "AtualizadoEm": "05/07/2023"
+  },
+  {
+    "id": 21,
+    "Versão": "1.1.010",
+    "AtualizadoEm": "06/07/2023"
+  },
+  {
+    "id": 22,
+    "Versão": "1.1.011",
+    "AtualizadoEm": "13/07/2023"
+  },
+  {
+    "id": 23,
+    "Versão": "1.1.012",
+    "AtualizadoEm": "13/07/2023"
+  },
+  {
+    "id": 24,
+    "Versão": "1.1.013",
+    "AtualizadoEm": "13/07/2023"
+  },
+  {
+    "id": 25,
+    "Versão": "1.1.015",
+    "AtualizadoEm": "24/07/2023"
+  },
+  {
+    "id": 26,
+    "Versão": "1.1.016",
+    "AtualizadoEm": "27/07/2023"
+  },
+  {
+    "id": 27,
+    "Versão": "1.1.017",
+    "AtualizadoEm": "28/07/2023"
+  },
+  {
+    "id": 28,
+    "Versão": "1.1.018",
+    "AtualizadoEm": "01/08/2023"
+  },
+  {
+    "id": 29,
+    "Versão": "1.1.019",
+    "AtualizadoEm": "09/08/2023"
+  },
+  {
+    "id": 30,
+    "Versão": "1.1.020",
+    "AtualizadoEm": "09/08/2023"
+  },
+  {
+    "id": 31,
+    "Versão": "1.1.021",
+    "AtualizadoEm": "18/08/2023",
+    "Implementações Realizadas": ["banco off-line"],
+    "Correções Realizadas": [
+      "erro do valor unitario zerado apos duplicar ou editar um pedido",
+      "erro de pesquisa de produtos da distribuidora ao editar ou duplicar um pedido",
+      "erro de falso 'Enviado' ao enviar dados para o sankhya sem a conexão",
+      "erro na validação do pedido enviado"
+    ]
+  },
+  {
+    "id": 32,
+    "Versão": "1.1.022",
+    "AtualizadoEm": "21/08/2023",
+    "Implementações Realizadas": ["banco off-line"],
+    "Correções Realizadas": [
+      "erro do valor unitario zerado apos duplicar ou editar um pedido",
+      "erro de pesquisa de produtos da distribuidora ao editar ou duplicar um pedido",
+      "erro de falso 'Enviado' ao enviar dados para o sankhya sem a conexão",
+      "erro na validação do pedido enviado",
+      "ajuste do pedido pendente de envio"
+    ]
+  },
+  {
+    "id": 33,
+    "Versão": "1.1.023",
+    "AtualizadoEm": "22/08/2023",
+    "Implementações Realizadas": ["banco off-line"],
+    "Correções Realizadas": [
+      "erro do valor unitario zerado apos duplicar ou editar um pedido",
+      "erro de pesquisa de produtos da distribuidora ao editar ou duplicar um pedido",
+      "erro de falso 'Enviado' ao enviar dados para o sankhya sem a conexão",
+      "erro na validação do pedido enviado",
+      "ajuste do pedido pendente de envio",
+      "correção no botão cancelar pedido, no caso de excluir o pedido e o botão voltar tela"
+    ]
+  },
+  {
+    "id": 34,
+    "Versão": "1.1.024",
+    "AtualizadoEm": "22/08/2023",
+    "Implementações Realizadas": ["banco off-line"],
+    "Correções Realizadas": [
+      "erro do valor unitario zerado apos duplicar ou editar um pedido",
+      "erro de pesquisa de produtos da distribuidora ao editar ou duplicar um pedido",
+      "erro de falso 'Enviado' ao enviar dados para o sankhya sem a conexão",
+      "erro na validação do pedido enviado",
+      "ajuste do pedido pendente de envio",
+      "correção no botão cancelar pedido, no caso de excluir o pedido e o botão voltar tela",
+      "redução tempo de sincronização",
+      "revisão do envio pendente"
+    ]
+  },
+  {
+    "id": 35,
+    "Versão": "1.1.025",
+    "AtualizadoEm": "23/08/2023",
+    "Implementações Realizadas": [
+      "banco off-line",
+      "lista de pedidos anteriores: botão que exibe uma lista de pedidos com filtragem por status, ultimos 3 pedidos, agora exibe os ultimos 03 enviados"
+    ],
+    "Correções Realizadas": [
+      "erro do valor unitario zerado apos duplicar ou editar um pedido",
+      "erro de pesquisa de produtos da distribuidora ao editar ou duplicar um pedido",
+      "erro de falso 'Enviado' ao enviar dados para o sankhya sem a conexão",
+      "erro na validação do pedido enviado",
+      "ajuste do pedido pendente de envio",
+      "correção no botão cancelar pedido, no caso de excluir o pedido e o botão voltar tela",
+      "redução tempo de sincronização",
+      "revisão do envio pendente"
+    ]
+  },
+  {
+    "id": 36,
+    "Versão": "1.1.026",
+    "AtualizadoEm": "24/08/2023",
+    "Implementações Realizadas": [
+      "banco off-line",
+      "lista de pedidos anteriores: botão que exibe uma lista de pedidos com filtragem por status, ultimos 3 pedidos, agora exibe os ultimos 03 enviados"
+    ],
+    "Correções Realizadas": ["mensagem para usuario caso link sankhya cair"]
+  },
+  {
+    "id": 37,
+    "Versão": "1.1.027",
+    "AtualizadoEm": "24/08/2023",
+    "Implementações Realizadas": [
+      "banco off-line",
+      "lista de pedidos anteriores: botão que exibe uma lista de pedidos com filtragem por status, ultimos 3 pedidos, agora exibe os ultimos 03 enviados"
+    ],
+    "Correções Realizadas": [
+      "mensagem para usuario caso link sankhya cair",
+      "mensagem para usuario caso link sankhya cair exibindo tambem ao receber dados"
+    ]
+  },
+  {
+    "id": 38,
+    "Versão": "1.1.028",
+    "AtualizadoEm": "24/08/2023",
+    "Implementações Realizadas": ["banco off-line"],
+    "Correções Realizadas": ["chamadas async"]
+  },
+  {
+    "id": 39,
+    "Versão": "1.1.029",
+    "AtualizadoEm": "25/08/2023",
+    "Implementações Realizadas": ["mensagens de atualização de sistema"],
+    "Correções Realizadas": []
+  },
+  {
+    "id": 40,
+    "Versão": "1.1.030",
+    "AtualizadoEm": "28/08/2023",
+    "Implementações Realizadas": ["mensagens de atualização de sistema"],
+    "Correções Realizadas": [
+      "correção no metodo de atualização, chamando o metodo no dia seguinte ao receber dados"
+    ]
+  },
+  {
+    "id": 41,
+    "Versão": "1.1.031",
+    "AtualizadoEm": "29/08/2023",
+    "Implementações Realizadas": ["mensagens de atualização de sistema"],
+    "Correções Realizadas": [
+      "correção da busca de produtos por nome no desck",
+      "correção do insert das tabelas adicionais no mobile",
+      "correção da pesquisa por grupo no mobile"
+    ]
+  },
+  {
+    "id": 42,
+    "Versão": "1.1.032",
+    "AtualizadoEm": "29/08/2023",
+    "Implementações Realizadas": ["mensagens de atualização de sistema"],
+    "Correções Realizadas": [
+      "correção da busca de produtos por nome no desck",
+      "correção do insert das tabelas adicionais no mobile",
+      "correção da pesquisa por grupo no mobile",
+      "correção da zoom iphone"
+    ]
+  },
+  {
+    "id": 43,
+    "Versão": "1.1.033",
+    "AtualizadoEm": "29/08/2023",
+    "Implementações Realizadas": [],
+    "Correções Realizadas": [
+      "correção da tabela adiconal trazendo valores e unidades zerados"
+    ]
+  },
+  {
+    "id": 44,
+    "Versão": "1.1.034",
+    "AtualizadoEm": "01/09/2023",
+    "Implementações Realizadas": [
+      "Nova estrutura de arquivo",
+      "Adição da alicota de IPI"
+    ],
+    "Correções Realizadas": [
+      "correção do metodo excluir cabecalhos, não é mais executado o delete mas um um pudate na prop ativo",
+      "não utilizar mais o banco pgamobileDelete no indexedDb"
+    ]
+  },
+  {
+    "id": 45,
+    "Versão": "1.1.035",
+    "AtualizadoEm": "11/09/2023",
+    "Implementações Realizadas": [
+      "Nova estrutura de arquivo",
+      "Adição da alicota de IPI"
+    ],
+    "Correções Realizadas": ["correção do metodo offline"]
+  },
+  {
+    "id": 46,
+    "Versão": "1.1.036",
+    "AtualizadoEm": "12/09/2023",
+    "Implementações Realizadas": [
+      "Nova estrutura de arquivo",
+      "Adição da alicota de IPI"
+    ],
+    "Correções Realizadas": [
+      "correção do metodo offline",
+      "correção do redefinir senha",
+      "receber dados somente para o banco local em caso de mobile",
+      "ajuste pedido, montando dados no front(mobile)"
+    ]
+  },
+  {
+    "id": 47,
+    "Versão": "1.1.037",
+    "AtualizadoEm": "19/09/2023",
+    "Implementações Realizadas": ["Adição da alicota de IPI NO PDF"],
+    "Correções Realizadas": []
+  },
+  {
+    "id": 48,
+    "Versão": "1.1.038",
+    "AtualizadoEm": "20/09/2023",
+    "Implementações Realizadas": [
+      "Adição da alicota de IPI NO PDF",
+      "Correção de Envio de Dados"
+    ],
+    "Correções Realizadas": []
+  },
+  {
+    "id": 49,
+    "Versão": "1.1.039",
+    "AtualizadoEm": "25/09/2023",
+    "Implementações Realizadas": [
+      "ALTERAÇÃO NO PARAMENTRO DO RESPONSE DE ERRO SANKHYA"
+    ],
+    "Correções Realizadas": []
+  },
+  {
+    "id": 50,
+    "Versão": "1.1.040",
+    "AtualizadoEm": "02/10/2023",
+    "Implementações Realizadas": [
+      "FRONT",
+      "ALTERAÇÃO DO ENVIO DO PEDIDO, O PEDIDO SERÁ ENVIADO COMO PROCESSAR E O BOT IRÁ ENVIAR AO SANKHYA",
+      "ALTERAÇÃO DA MENSAGEM AO ENVIAR PEDIDO AO SANKHYA, DEIXANDO MAIS CLARO O PROCESSO",
+      "SALVANDO PEDIDO ITEM A ITEM",
+      "SE O PEDIDO FOR MARCADO COMO PROCESSAR E NÃO PODERÁ SER DUPLICADO ATE MUDAR DE STATUS PARA ENVIADO",
+      "VERSÃO DO FRONT SALVANDO NO CABECALHO DO PEDIDO",
+      "RETIRADA A LÓGICA DO VERIFICAR PROCESSADO, SERÁ FEITO PELO BOT"
+    ],
+    "Correções Realizadas": [
+      "FRONT",
+      "CORREÇÃO DO CONV AO EDITAR, CORRIGINDO O ERRO DE QUANTIDADES ERRADAS"
+    ]
+  },
+  {
+    "id": 51,
+    "Versão": "1.1.041",
+    "AtualizadoEm": "05/10/2023",
+    "Implementações Realizadas": [],
+    "Correções Realizadas": [
+      "CORREÇÃO DO RECEBER DADOS VERIFICANDO DADOS ATUALIZADOS, ATUALIZAÇÃO AGORA FEITA AO CLICAR NO SELECT DO PARCEIRO"
+    ]
+  },
+  {
+    "id": 52,
+    "Versão": "1.1.042",
+    "AtualizadoEm": "11/10/2023",
+    "Implementações Realizadas": [],
+    "Correções Realizadas": [
+      "CORREÇÃO DO SQL TIPONEGOCIAÇÃO DO RECEBER DADOS (MOBILE)"
+    ]
+  },
+  {
+    "id": 53,
+    "Versão": "1.1.043",
+    "AtualizadoEm": "16/10/2023",
+    "Implementações Realizadas": [
+      "CRIAÇÃO DE MODAL(CARREGANDO DADOS...) AO ESCOLHER O PEDIDO NAS LISTAS, E O MODAL COM A LISTA DE PEDIDOS SÓ APARECE APÓS A LISTA DOS ITENS ESTA PREENCHIDA."
+    ],
+    "Correções Realizadas": []
+  },
+  {
+    "id": 54,
+    "Versão": "1.1.044",
+    "AtualizadoEm": "01/11/2023",
+    "Implementações Realizadas": [
+      "CRIAÇÃO DE CARD CAMPANHA NA HOME DOS VENDEDORES E COORDENADORES, COM BOTÃO (VISUALIZAR CAMPANHAS)",
+      "CRIAÇÃO DA PAGE ACOMPANHAMENTO DE CAMPANHAS PARA VENDEDORES E COORDENADORES FILTRANDO POR CAMPANHAS",
+      "VERIFICAÇÃO DE VALORES DOS ITENS DE PEDIDOS DUPLICACADOS OU EDITADOS,",
+      "VERIFICA E ALTERA O VALOR PARA A TABELA ATUAL"
+    ],
+    "Correções Realizadas": [
+      "CORREÇÃO DOS ITENS DA LISTA DO PDF NA PGE PEDIDO.",
+      "CORREÇÃO DE CABEÇALHOS DE VENDAS DUPLICADOS=======================================================================",
+      "HOUVERAM DOIS CASOS DE REGISTROS DUPLICADOS NO MES DE OUTUBRO,REGISTROS DUPLAMENTE (2 OU 3 VEZES O MESMO REGISTRO)",
+      "INSERIDOS NA TABELA CABECALHOVENDA, ESTAVAM SENDO INSERIDOS VIA AÇÃO DO USUARIO AO CLICAR NO BOTAO SALVAR E AO MESMO",
+      "TEMPO ESTAVA SENDO SICRONIZADO ATRAVEZ DA FUNÇÃO SINCRONIZAR PEDIDOS, ONDE SINCRONIZA PEDIDOS COM A PROPRIEDADE",
+      "SINCRONIZADO =='N' ",
+      "FOI FEITA A CORREÇÃO ONDE O METODO DE SINCRONIZAR, NAO FARA MAIS A VERIFICAÇÃO QUANDO O USUARIOS ESTIVER EM DIGITAÇÃO DO PEDIDO",
+      "SOMENTE É FEITA A PATIR DO MOMENTO QUE ELE FINALIZA O PEDIDO, DEIXANDO ESTE METODO RESPONSAVEL POR SALVAR O CABEÇALHO DO PEDIDO",
+      "O SALVAR ITENS EM RASCUNHO EM MOBILE ESTA SALVANDO ITEM A ITEM NO BANCO LOCAL E DEPOIS SERA SINCRONIZADO O CABEÇALHOS COM ITENS",
+      "PARA O BANCO DAS NUVENS, NA VERSÃO WEB CONTINUA SALVANDO ITEM A ITEM NO BANCO DAS NUVENS"
+    ]
+  },
+  {
+    "id": 55,
+    "Versão": "1.1.045",
+    "AtualizadoEm": "16/11/2023",
+    "Implementações Realizadas": [],
+    "Correções Realizadas": [
+      "VERIFICAÇÃO DA QUANTIDADE DE ITENS SALVOS DO PEDIDO, VERIFICA SE A QUANTIDADE SALVA NO BANCO É A MESMA",
+      "DO BANCO LOCAL, SOMENTE APOS A VERIFICAÇÃO OS ITENS E O CABECALHO SAO MARCADOS COMO SINCRONIZADO",
+      "CORREÇÃO DE NÃO VERIFICAR A TABELA DE PREÇO QUANDO FOR A VENDEDORA 14713, POIS ELA TEM PRODUTOS REPETIDOS COM VALORES DIFERENTES",
+      "O PRODUTO NA TABELA TEM UM VALOR E NA TABELA ADICIONAL TEM O MESMO PRODUTO COM OUTRO VALOR, NAO PODENDO HAVER A VERIFICAÇÃO DO VALOR",
+      "CORREÇÃO DO SQL QUE RETORNA A META E A VENDA DO MES NO CARD HOME DO COORDENADOR"
+    ]
+  },
+  {
+    "id": 56,
+    "Versão": "1.1.046",
+    "AtualizadoEm": "16/11/2023",
+    "Implementações Realizadas": [],
+    "Correções Realizadas": [
+      "IMPLEMENTADO ROTINA DE RDV - Relatorio de Vista."
+    ]
+  },
+  {
+    "id": 57,
+    "Versão": "1.1.047",
+    "AtualizadoEm": "18/11/2023",
+    "Implementações Realizadas": [],
+    "Correções Realizadas": [
+      "MELHORIA NO ENVIO DE PEDIDO DE VENDAS problema de Duplicar pedido ou item."
+    ]
+  },
+  {
+    "id": 58,
+    "Versão": "1.1.048",
+    "AtualizadoEm": "08/01/2025",
+    "Implementações Realizadas": [],
+    "Correções Realizadas": [
+      "Adicionado a empresa 3 Distribuidora no ..Pedidos/index.tsx linha 4328 correção appMobile "
+    ]
+  },
+  {
+    "id": 58,
+    "Versão": "1.1.049",
+    "AtualizadoEm": "02/03/2026",
+    "Implementações Realizadas": [
+      "Na tela de pedido, clientes com origem no CE nao apliam IPI - CHAMADO:2601230026",
+      "Preenchendo natureza padrão ao selecionar a cond. pgto.",
+      "Lista de pedidos não enviados na home - CHAMADO:2601230026"
+    ],
+    "Correções Realizadas": [
+      "Correção da visualização do relatorio detalhado Vendas x meta dos consultores(Acompanhamento de vendas) - CHAMADO:2601230015", 
+      "Melhoria na busca do stastus online/offline, agora a cada 5 minutos é verificado o status da conexão e atualizado o status no header do app",
+      "Ajustes nas buscas das metas filtrando por empresa != de 6(hanova) - CHAMADO:2512190006"
+    ]
+  },
+  {
+    "id": 59,
+    "Versão": "1.1.050",
+    "AtualizadoEm": "04/03/2026",
+    "Implementações Realizadas": [],
+    "Correções Realizadas": [
+      "Ajuste na visao da tela de Acompanhamento de vendas - CHAMADO:2603020022 e 2603020025", 
+      "Correções de processos comentados do codigo(edição de pedidos banco local, envio de pedidos automaticamewnte do banco local quando sincrinizado == N)",
+      "Ajustes na lista de pedidos não enviados na home (mostrando data do pedido e botões Cancelar e Editar)"
+    ]
+  },
+  {
+    "id": 60,
+    "Versão": "1.1.051",
+    "AtualizadoEm": "09/03/2026",
+    "Implementações Realizadas": [
+      "Criação do comunicado de Atualização, onde ao clicar em ciente executa  o reload"
+    ],
+    "Correções Realizadas": [
+      "Correção na visualização da versao do aplicativo",
+      "Reativação do comunicado comercial"
+    ]
+  }
+]

@@ -1,0 +1,600 @@
+.acesso-personalizado-edit {
+  width: 100%;
+  margin-top: 5px;
+  height: 195px;
+  background-color: #f9f5f5;
+  box-shadow: 0 4px 8px 1px #c6c6ca;
+  flex: 0 0 auto;
+  padding: 15px;
+}
+
+.check-grupo {
+  display: flex;
+  text-align: center;
+  margin-right: 15px;
+  height: 25px;
+  width: 100% !important;
+  margin-bottom: 20px;
+}
+#grupo {
+  width: 20px !important;
+  height: 20px !important;
+  min-height: 20px !important;
+  min-width: 20px !important;
+  margin-right: 15px;
+  margin-top: 5px;
+  padding-bottom: 5px !important;
+}
+.text {
+  font-size: 15px;
+  color: #6b6868 !important;
+}
+.btn-editar {
+  margin-top: 85px !important;
+}
+.btn-cancelar {
+  margin-top: 25px !important;
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(0deg, #711e1e 0%, #e56e6e 100%);
+  color: aliceblue;
+  @media (max-width: 290px) {
+    width: 170px;
+  }
+}
+.btn-cancelar:hover {
+  background: linear-gradient(0deg, #8e1c1c 0%, #b54444 100%);
+  color: aliceblue;
+}
+
+.btn-cadastrar {
+  margin-top: 25px;
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(0deg, #054f77 0%, #4ea1cf 100%);
+  color: aliceblue;
+  @media (max-width: 290px) {
+    width: 170px;
+  }
+}
+.btn-cadastrar:hover {
+  background: linear-gradient(0deg, #033049 0%, #2f7aa2 100%);
+  color: aliceblue;
+}
+#btn-mob {
+  display: none;
+  @media (max-width: 1280px) {
+    display: block;
+  }
+}
+#btn-desck {
+  display: block;
+  @media (max-width: 1280px) {
+    display: none;
+  }
+}
+.logo-cadastro-menu {
+  margin-top: 40px;
+  width: 300px;
+  margin-left: 60px;
+  bottom: 20px !important;
+  background-image: url('../../assets/MONTARMENU.png');
+  background-size: 70%;
+  background-repeat: no-repeat, repeat;
+  margin-bottom: 180px;
+  @media (max-width: 1280px) {
+    display: none;
+  }
+}
+.logo-cadastro-paginas {
+  margin-top: 40px;
+  width: 300px;
+  margin-left: 60px;
+  bottom: 20px !important;
+  background-image: url('../../assets/PAGINASBASE.png');
+  background-size: 70%;
+  background-repeat: no-repeat, repeat;
+  margin-bottom: 180px;
+  @media (max-width: 1280px) {
+    display: none;
+  }
+}
+.logo-cadastro-vendas {
+  margin-top: 60px;
+  width: 280px;
+  margin-left: 10px;
+  bottom: 20px !important;
+  background-image: url('../../assets/VENDEDOR.png');
+  background-size: 65%;
+  background-repeat: no-repeat, repeat;
+  margin-bottom: 180px;
+  @media (max-width: 1280px) {
+    display: none;
+  }
+}
+.modal-cadastro-vendedor {
+  .modal-content {
+    width: 800px;
+    height: auto;
+    left: -28%;
+    @media (max-width: 1280px) {
+      width: 100%;
+      left: 0%;
+      top: 0px;
+    }
+  }
+  .modal-body {
+    padding-top: 0 !important;
+  }
+  h1 {
+    font-size: 25px;
+  }
+}
+.modal-edit-vendedor {
+  .modal-content {
+    width: 700px;
+    height: auto;
+    left: -20%;
+    @media (max-width: 1280px) {
+      width: 100%;
+      left: 0%;
+      top: 0px;
+    }
+  }
+  .modal-body {
+    padding-top: 0 !important;
+  }
+  h1 {
+    font-size: 25px;
+  }
+
+  .bloco-button-edit {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    @media (max-width: 1280px) {
+      flex-direction: row;
+      gap: 12px;
+    }
+  }
+}
+.alerta-vendedor {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto !important;
+  text-align: center;
+  justify-content: center !important;
+  align-items: center !important;
+  @media (max-width: 1280px) {
+    text-align: left;
+  }
+}
+.alerta-vendedor2 {
+  width: 100% !important;
+  max-width: 100%;
+  margin: 0 auto !important;
+  text-align: center;
+  justify-content: center !important;
+  align-items: center !important;
+  @media (max-width: 1280px) {
+    text-align: left;
+  }
+}
+
+.btn-edit-vend {
+  width: 45% !important;
+  @media (max-width: 1280px) {
+    width: 49% !important;
+  }
+}
+
+.btn-pesquisas {
+  font-size: 13px;
+}
+.div-pesquisa-status {
+  @media (max-width: 1280px) {
+    margin-top: 20px;
+  }
+}
+.conteudo-botoes {
+  display: flex;
+  justify-content: space-around;
+  @media (max-width: 1280px) {
+    flex-direction: column;
+  }
+}
+.alerta-Vendedor {
+  text-align: center !important;
+  width: 100%;
+  max-width: 100%;
+}
+.codPesquisa {
+  width: 200px;
+  @media (max-width: 1280px) {
+    width: 100%;
+  }
+}
+
+.input-cod-Pesquisa {
+  width: 100%;
+  height: auto;
+  border-radius: 0.1rem;
+  outline: initial !important;
+  -webkit-box-shadow: initial !important;
+  font-size: 0.8rem;
+  padding: 0.7rem 0.75rem 0.65rem 0.75rem;
+  line-height: 1.5;
+  border: 1px solid #d7d7d7;
+  background: #fff;
+  color: #212121;
+  margin-top: 2px;
+  box-shadow: 0 4px 8px 1px #d7d7d7 !important;
+}
+.input-cod-Pesquisa:active,
+.input-cod-Pesquisa:focus {
+  border: 1px solid #3e92e5;
+  background-color: #c8e2fd;
+}
+#btn-novo-vend {
+  top: 20px !important;
+  margin-right: 20px !important;
+  @media (max-width: 1280px) {
+    top: 15px !important;
+  }
+}
+.bloco-codigo {
+  width: 25% !important;
+  @media (max-width: 1280px) {
+    width: 100%;
+  }
+}
+.bloco-regiao {
+  width: 55% !important;
+  @media (max-width: 1280px) {
+    width: 100%;
+  }
+}
+.bloco-tipo {
+  width: 50% !important;
+  @media (max-width: 1280px) {
+    width: 100%;
+  }
+}
+.bloco-email {
+  width: 50% !important;
+  @media (max-width: 1280px) {
+    width: 100%;
+  }
+}
+.bloco-status-vend {
+  width: 40% !important;
+  @media (max-width: 1280px) {
+    width: 100%;
+  }
+}
+.atua-comprador {
+  margin-top: 20px;
+  margin-left: 50px;
+  width: 45%;
+  @media (max-width: 1280px) {
+    margin-top: 20px;
+    width: 100%;
+    margin-left: 0px;
+  }
+}
+.input-id-par {
+  width: 100% !important;
+}
+.coluna-parceiro {
+  display: flex !important;
+  @media (max-width: 1280px) {
+    display: flex !important;
+  }
+}
+.coluna-pesquisa-inp {
+  width: 49%;
+  margin-top: 10px;
+  padding-bottom: 2px !important;
+  @media (max-width: 1280px) {
+    width: 100%;
+    margin-bottom: 20px;
+    flex-direction: column;
+  }
+}
+.bloco-cod-par {
+  width: 100%;
+  display: flex;
+  @media (max-width: 1280px) {
+    flex-direction: column;
+  }
+}
+.coluna-pesquisaPar-Ger {
+  padding-left: 10px;
+  padding-right: 10px;
+  justify-content: space-between;
+}
+.bloco-cod-pesq-vendedor {
+  width: 30% !important;
+  @media (max-width: 1280px) {
+    width: 100% !important;
+  }
+}
+.btn-cadastrar-novoSub {
+  margin-left: 30%;
+  width: 40%;
+  padding: 15px;
+  background: linear-gradient(0deg, #0f0f10 0%, #6f777c 100%);
+  color: aliceblue;
+  @media (max-width: 290px) {
+    width: 100%;
+  }
+}
+.btn-cadastrar-vendedor {
+  margin-left: 30%;
+  width: 40%;
+  padding: 15px;
+  background: linear-gradient(0deg, #054f77 0%, #4ea1cf 100%);
+  color: aliceblue;
+  @media (max-width: 290px) {
+    width: 100%;
+  }
+}
+.btn-cadastrar-coluna {
+  width: 40%;
+  padding: 15px;
+  background: linear-gradient(0deg, #030506 0%, #20272a 100%);
+  color: aliceblue;
+  @media (max-width: 1280px) {
+    width: 100%;
+    margin-left: 0px;
+  }
+}
+.btn-cadastrar-coluna:hover {
+  color: rgb(248, 219, 6) !important;
+}
+
+.btn-editar-coluna {
+  width: 40%;
+  padding: 15px;
+  background: linear-gradient(0deg, #054f77 0%, #4ea1cf 100%);
+  color: aliceblue;
+  @media (max-width: 1280px) {
+    width: 100%;
+    margin-left: 0px;
+  }
+}
+
+.btn-cadastrar-coluna2 {
+  width: 160px;
+  height: 45px;
+  padding: 5px;
+  margin-top: 20px;
+  background: linear-gradient(0deg, #030506 0%, #20272a 100%);
+  color: aliceblue;
+  @media (max-width: 1280px) {
+    margin: auto !important;
+    margin-top: 20px !important;
+  }
+  @media (max-width: 290px) {
+    width: 100%;
+  }
+}
+.btn-cadastrar-coluna2:hover {
+  color: rgb(248, 219, 6) !important;
+}
+.btn-cadastrar-coluna3 {
+  height: 38px;
+  padding: 5px;
+  padding-left: 8px;
+  padding-right: 8px;
+  margin-top: 20px;
+  background: linear-gradient(0deg, #030506 0%, #20272a 100%);
+  color: aliceblue;
+  @media (max-width: 1280px) {
+    margin: auto !important;
+    margin-top: 20px !important;
+  }
+  @media (max-width: 290px) {
+    width: 100%;
+  }
+}
+.btn-cadastrar-coluna3:hover {
+  color: rgb(248, 219, 6) !important;
+}
+
+.pesquisa-vend-top {
+  margin-top: 0px !important;
+  @media (max-width: 290px) {
+    margin-top: 10px !important;
+  }
+}
+.bloco-buttom-vendedor {
+  margin-top: 10px !important;
+  width: 100% !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+.codpar {
+  width: 150px;
+}
+.btn-permissao {
+  margin-top: 15px;
+  width: 130px;
+  padding: 10px;
+  margin-left: 60px;
+  border: 1px solid #121213;
+  font-size: 10px !important;
+  background: linear-gradient(0deg, #868686 0%, #eef1f2 100%);
+  color: #000;
+  @media (max-width: 290px) {
+    width: 170px;
+    margin-left: 0px;
+  }
+}
+.btn-permissao:hover {
+  background: linear-gradient(0deg, #060606 0%, #36393b 100%);
+  color: aliceblue;
+}
+.btn-permissao-criar {
+  margin-top: 25px;
+  width: 170px;
+  padding: 12px;
+  border: 1px solid #121213;
+  font-size: 14px !important;
+  background: linear-gradient(0deg, #868686 0%, #eef1f2 100%);
+  color: #000;
+  @media (max-width: 290px) {
+    width: 170px;
+    margin-left: 0px;
+  }
+}
+.btn-permissao-criar:hover {
+  background: linear-gradient(0deg, #060606 0%, #36393b 100%);
+  color: aliceblue;
+}
+.modal-menu {
+  .modal-content {
+    box-shadow: 0 4px 8px 1px #121213 !important;
+  }
+}
+.btn-permissaoGrupo {
+  margin-top: 2px;
+  width: 140px;
+  padding: 10px;
+  margin-left: 310px;
+  font-size: 12px !important;
+  border: 1px solid #121213;
+  background: linear-gradient(0deg, #060606 0%, #36393b 100%);
+  color: aliceblue;
+  @media (max-width: 790px) {
+    width: 170px;
+    margin-left: 0px;
+  }
+}
+.btn-permissaoGrupo:hover {
+  background: linear-gradient(0deg, #868686 0%, #eef1f2 100%);
+
+  color: #000;
+}
+.modal-cadastro-telas {
+  .modal-content {
+    width: 800px;
+    height: auto;
+    left: -28%;
+    @media (max-width: 1280px) {
+      width: 100%;
+      left: 0%;
+      top: 0px;
+    }
+  }
+  .modal-body {
+    padding-top: 0 !important;
+  }
+  h1 {
+    font-size: 25px;
+  }
+}
+.buttonIcon {
+  cursor: pointer;
+  font-size: 28px;
+  @media (max-width: 1280px) {
+    margin-top: 10px;
+    font-size: 20px;
+  }
+}
+.buttonIconActive {
+  cursor: pointer;
+  color: #298ec4;
+  font-weight: bold;
+  font-size: 28px;
+  @media (max-width: 1280px) {
+    margin-top: 10px;
+    font-size: 20px;
+  }
+  box-shadow: 4px 3px 4px 2px #b2d0dc !important;
+}
+
+.metodoIcon {
+  display: flex;
+  margin: auto !important;
+  justify-content: space-around !important;
+  margin-top: 10px !important;
+  margin-bottom: 20px !important;
+  width: 97%;
+  min-height: 60px;
+  border-radius: 8px;
+  border: 1px solid #aaa4a4;
+  box-shadow: 4px 3px 4px 2px #dfe9ed !important;
+  padding: 10px;
+}
+.iconeBloco {
+  p {
+    margin-left: 10px !important;
+  }
+}
+.bloco-buttom-vendedor2 {
+  margin-top: 10px !important;
+  width: 100% !important;
+  display: flex;
+  justify-content: space-around !important;
+  align-items: center !important;
+  @media (max-width: 1280px) {
+    flex-direction: column;
+  }
+}
+.alerta-Vendedor3 {
+  width: 250% !important;
+  margin: auto !important;
+  text-align: center;
+  justify-content: center !important;
+  align-items: center !important;
+  @media (max-width: 1280px) {
+    text-align: left;
+  }
+}
+.alerta-etiqueta {
+  width: 80vw;
+  margin: auto !important;
+  text-align: center;
+  justify-content: center !important;
+  align-items: center !important;
+  @media (max-width: 1280px) {
+    text-align: left;
+  }
+}
+.modal-gerenciamento {
+  .modal-content {
+    width: 1000px;
+    height: auto;
+    left: -50%;
+    @media (max-width: 1280px) {
+      width: 100%;
+      left: 0%;
+      top: 0px;
+    }
+  }
+  .modal-body {
+    padding-top: 0 !important;
+  }
+  h1 {
+    font-size: 25px;
+  }
+
+  .bloco-button-edit {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    @media (max-width: 1280px) {
+      flex-direction: row;
+      gap: 12px;
+    }
+  }
+}
+.tarjaDados {
+  width: 100%;
+  height: auto;
+  padding: 3px;
+  padding-top: 5px !important;
+  background-color: #2271b3;
+  color: #ffff;
+}

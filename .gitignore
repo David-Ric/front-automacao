@@ -1,0 +1,16 @@
+# Ignorar dependências
+node_modules/
+
+# Ignorar build de produção
+build/
+
+# Ignorar variáveis de ambiente locais
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Ignorar arquivos do sistema
+.DS_Store
+Thumbs.db

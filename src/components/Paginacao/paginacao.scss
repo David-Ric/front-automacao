@@ -1,0 +1,18 @@
+@use '../../styles/colors.scss' as *;
+
+
+#page-navegation{
+  .page-link{
+    border: none;
+    color:#0065DD;
+    &.active{
+      color:#FD4A19;
+      font-weight: 800;
+    }
+  }
+}
+
+.total-registros {
+  color:#0065DD;
+  font-weight: 400;
+}

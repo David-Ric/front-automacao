@@ -1,0 +1,319 @@
+.acesso-personalizado-edit {
+  width: 100%;
+  margin-top: 5px;
+  height: 195px;
+  background-color: #f9f5f5;
+  box-shadow: 0 4px 8px 1px #c6c6ca;
+  flex: 0 0 auto;
+  padding: 15px;
+}
+.acesso-personalizado {
+  width: 40%;
+  margin-top: 5px;
+  margin-left: 10px;
+  background-color: #f9f5f5;
+  box-shadow: 0 4px 8px 1px #c6c6ca;
+  flex: 0 0 auto;
+  padding: 15px;
+  .tabela-responsiva {
+    margin-top: 10px !important;
+  }
+  @media (max-width: 1280px) {
+    margin-top: 30px;
+    width: 100%;
+  }
+}
+
+.acesso-personalizado-edicao {
+  width: 80%;
+  margin-top: 30px;
+  margin-left: 70px;
+  background-color: #f9f5f5;
+  box-shadow: 0 4px 8px 1px #c6c6ca;
+  flex: 0 0 auto;
+  padding: 15px;
+  .tabela-responsiva {
+    margin-top: 10px !important;
+  }
+  @media (max-width: 1280px) {
+    margin-top: 30px;
+    width: 100%;
+    margin-left: 0 !important;
+  }
+}
+.check-grupo {
+  display: flex;
+  text-align: center;
+  margin-right: 15px;
+  height: 25px;
+  margin-bottom: 20px;
+}
+
+.text {
+  font-size: 15px;
+  color: #6b6868 !important;
+}
+.btn-editar {
+  margin-top: 85px !important;
+}
+.btn-cancelar {
+  margin-top: 25px !important;
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(0deg, #711e1e 0%, #e56e6e 100%);
+  color: aliceblue;
+  @media (max-width: 290px) {
+    width: 170px;
+  }
+}
+.btn-cancelar:hover {
+  background: linear-gradient(0deg, #8e1c1c 0%, #b54444 100%);
+  color: aliceblue;
+}
+.btn-cadastrar {
+  margin-top: 25px;
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(0deg, #054f77 0%, #4ea1cf 100%);
+  color: aliceblue;
+  @media (max-width: 290px) {
+    width: 170px;
+  }
+}
+.btn-cadastrar:hover {
+  background: linear-gradient(0deg, #033049 0%, #2f7aa2 100%);
+  color: aliceblue;
+}
+#btn-mob {
+  display: none;
+  @media (max-width: 1280px) {
+    display: block;
+  }
+}
+#btn-desck {
+  display: block;
+  @media (max-width: 1280px) {
+    display: none;
+  }
+}
+.logo-cadastro-parceiro {
+  margin-top: 30px;
+  width: 280px;
+  margin-left: 20px;
+  bottom: 20px !important;
+  background-image: url('../../assets/parceiros.png');
+  background-size: 65%;
+  background-repeat: no-repeat, repeat;
+  margin-bottom: 180px;
+  @media (max-width: 1280px) {
+    display: none;
+  }
+}
+.logo-cadastro {
+  margin-top: 20px;
+  width: 280px;
+  margin-right: 50px;
+  height: 760px;
+  bottom: 20px !important;
+  background-image: url('../../assets/bannergeral.png');
+  background-size: 100%;
+  background-repeat: no-repeat, repeat;
+  @media (max-width: 1280px) {
+    display: none;
+  }
+}
+.modal-cadastro-user {
+  .modal-content {
+    width: 900px;
+    height: auto;
+    left: -40%;
+    @media (max-width: 1280px) {
+      width: 100%;
+      left: 0%;
+      top: 0px;
+    }
+  }
+  .modal-body {
+    padding-top: 0 !important;
+  }
+  h1 {
+    font-size: 25px;
+  }
+}
+.modal-cadastro-user-inicial {
+  .modal-content {
+    width: 600px;
+    height: auto;
+    left: -10%;
+    @media (max-width: 1280px) {
+      width: 100%;
+      left: 0%;
+      top: 0px;
+    }
+  }
+  .modal-body {
+    padding-top: 0 !important;
+  }
+  h1 {
+    font-size: 25px;
+  }
+}
+.modal-edit-user {
+  .modal-content {
+    justify-content: center !important;
+    width: 1000px;
+    height: auto;
+    left: -47%;
+    @media (max-width: 1280px) {
+      width: 100%;
+      left: -3%;
+      top: 0px;
+    }
+  }
+  .modal-body {
+    justify-content: center !important;
+    align-items: center !important;
+    display: flex;
+    padding-top: 0 !important;
+    @media (max-width: 1280px) {
+      flex-direction: column !important;
+    }
+  }
+  .conteudo-user {
+    line-height: 10px !important;
+    margin: auto !important;
+    margin-top: 20px !important;
+    align-items: center;
+    width: 250px;
+    img {
+      margin-left: 50px;
+    }
+    h2 {
+      text-align: center;
+      max-height: 25px;
+    }
+    @media (max-width: 1280px) {
+      justify-content: center !important;
+      padding: 10px;
+      margin-bottom: 0px !important;
+    }
+  }
+  .form-cadastro-user {
+    width: 75%;
+    @media (max-width: 1280px) {
+      width: 100%;
+    }
+  }
+  h1 {
+    font-size: 25px;
+  }
+}
+.alerta-user {
+  width: 460%;
+  margin: auto !important;
+  text-align: center;
+  @media (max-width: 1280px) {
+    text-align: left;
+  }
+}
+.alerta-parceiro {
+  width: 760%;
+  margin: auto !important;
+  text-align: center;
+  @media (max-width: 1280px) {
+    text-align: left;
+  }
+}
+
+#nomePesquisa {
+  width: 100% !important;
+}
+#statusPesquisa {
+  width: 160px !important;
+  font-size: 1.8vh !important;
+  @media (max-width: 1280px) {
+    width: 100% !important;
+  }
+}
+#statusPesquisa2 {
+  width: 260px !important;
+  font-size: 13px !important;
+  @media (max-width: 1280px) {
+    font-size: 12px !important;
+    width: 100% !important;
+  }
+}
+.btn-pesquisas {
+  font-size: 13px;
+}
+.div-pesquisa-status {
+  @media (max-width: 1280px) {
+    margin-top: 20px;
+  }
+}
+.conteudo-botoes {
+  display: flex;
+  justify-content: space-around;
+  @media (max-width: 1280px) {
+    flex-direction: column;
+  }
+}
+.blocoTipo {
+  width: 200px !important;
+  @media (max-width: 1280px) {
+    width: 100% !important;
+  }
+}
+.conteudo-cadastro-parceiro {
+  letter-spacing: 1px;
+  width: 100%;
+  @media (max-width: 1280px) {
+    width: 100%;
+  }
+}
+.div-visitas {
+  width: 80%;
+  margin: auto !important;
+  @media (max-width: 1280px) {
+    width: 100%;
+  }
+}
+.div-conteudo-geral {
+  display: flex;
+  @media (max-width: 1280px) {
+    flex-direction: column;
+  }
+}
+.conteudo-modal-cadastro-user {
+  width: 100% !important;
+  display: flex;
+  @media (max-width: 1280px) {
+    flex-direction: column;
+  }
+}
+.coluna-dados-user {
+  width: 70% !important;
+  @media (max-width: 1280px) {
+    width: 100% !important;
+  }
+}
+.coluna-dados-user-inicial {
+  width: 100% !important;
+  @media (max-width: 1280px) {
+    width: 100% !important;
+  }
+}
+.div-conteudo-btn {
+  border-top: 1px solid #c6c6ca;
+  display: flex;
+  align-items: flex-start;
+  padding-top: 15px;
+  padding-left: 150px;
+  padding-right: 150px;
+  @media (max-width: 1280px) {
+    flex-direction: row;
+    gap: 12px;
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+}
