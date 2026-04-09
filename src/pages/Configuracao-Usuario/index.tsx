@@ -8,7 +8,11 @@ import Modal from 'react-bootstrap/Modal';
 import api from '../../services/api';
 import { iDadosUsuario } from '../../@types';
 import logoAlyne from '../../assets/logo-dark.png';
-import { criarBancoDados, versao } from '../../data/indexedDB';
+import {
+  criarBancoDados,
+  limparBancoLocalMantendoPedidos,
+  versao,
+} from '../../data/indexedDB';
 import { openDB } from 'idb';
 
 type ConfigUsuario = {
@@ -75,18 +79,7 @@ export default function ConfiguracaoUsuario() {
   }
 
   async function limparBancoLocal() {
-    const db = await openDB<any>('pgamobile', versao);
-    try {
-      const storeNames = Array.from(db.objectStoreNames);
-      if (storeNames.length === 0) return;
-      const tx = db.transaction(storeNames, 'readwrite');
-      await Promise.all(storeNames.map((s) => tx.objectStore(s).clear()));
-      await tx.done;
-    } finally {
-      try {
-        db.close();
-      } catch {}
-    }
+    await limparBancoLocalMantendoPedidos();
   }
 
   async function executarResetLocal() {
@@ -103,7 +96,7 @@ export default function ConfiguracaoUsuario() {
           db.close();
         } catch {}
         try {
-          await deleteIndexedDB();
+          await limparBancoLocalMantendoPedidos();
         } catch {}
       }
       try {

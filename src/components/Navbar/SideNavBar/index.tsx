@@ -103,7 +103,11 @@ import {
 } from 'react-icons/bi';
 import { openDB, DBSchema } from 'idb';
 
-import { criarBancoDados, versao } from '../../../data/indexedDB';
+import {
+  criarBancoDados,
+  limparBancoLocalMantendoPedidos,
+  versao,
+} from '../../../data/indexedDB';
 
 import path from 'path';
 interface PostLido {
@@ -1246,7 +1250,9 @@ export default function SideNavBar() {
   async function limparBancoLocal() {
     const db = await openDB<PgamobileDB>('pgamobile', versao);
     try {
-      const storeNames = Array.from(db.objectStoreNames);
+      const storeNames = Array.from(db.objectStoreNames).filter(
+        (s) => s !== 'cabecalhoPedidoVenda' && s !== 'itemPedidoVenda'
+      );
       if (storeNames.length === 0) {
         return;
       }
@@ -1265,7 +1271,7 @@ export default function SideNavBar() {
       setResetLocalDataLoading(true);
       let resetou = false;
       try {
-        await limparBancoLocal();
+        await limparBancoLocalMantendoPedidos();
         resetou = true;
       } catch {}
       if (!resetou) {
@@ -1274,7 +1280,7 @@ export default function SideNavBar() {
           db.close();
         } catch {}
         try {
-          await deleteIndexedDB();
+          await limparBancoLocalMantendoPedidos();
         } catch {}
       }
       try {
@@ -1322,9 +1328,40 @@ export default function SideNavBar() {
   }
 
   //======dados do sankhya  ===================================
+  const prefixoMensagemTabelaRef = useRef<'Atualizando' | 'Inserindo'>('Atualizando');
+
+  function mensagemTabela(nome: string, tag?: string) {
+    const prefixo = prefixoMensagemTabelaRef.current;
+    const sufixo = prefixo === 'Inserindo' ? ' no banco local' : '';
+    const extra = tag ? `...${tag}` : '...';
+    return `${prefixo} ${nome}${sufixo}${extra}`;
+  }
+
+  function limparRecebimentoTravado(force?: boolean): boolean {
+    try {
+      const startedAtRaw = localStorage.getItem('RecebendoDadosStartedAt');
+      const startedAt = startedAtRaw != null ? Number(startedAtRaw) : NaN;
+      const stale =
+        !Number.isFinite(startedAt) || Date.now() - startedAt > 10 * 60 * 1000;
+      if (force || stale) {
+        localStorage.removeItem('RecebendoDados');
+        localStorage.removeItem('RecebendoDadosSource');
+        localStorage.removeItem('RecebendoDadosStartedAt');
+        localStorage.removeItem('RecebendoDadosModal');
+        return true;
+      }
+      return false;
+    } catch {
+      return false;
+    }
+  }
+
   function iniciarRecebimentoGlobal(origem: string): boolean {
     try {
-      if (localStorage.getItem('RecebendoDados') === 'true') return false;
+      if (localStorage.getItem('RecebendoDados') === 'true') {
+        const limpou = limparRecebimentoTravado();
+        if (!limpou) return false;
+      }
       localStorage.setItem('RecebendoDados', 'true');
       localStorage.setItem('RecebendoDadosSource', origem);
       localStorage.setItem('RecebendoDadosStartedAt', String(Date.now()));
@@ -1339,7 +1376,9 @@ export default function SideNavBar() {
       localStorage.removeItem('RecebendoDados');
       localStorage.removeItem('RecebendoDadosSource');
       localStorage.removeItem('RecebendoDadosStartedAt');
+      localStorage.removeItem('RecebendoDadosModal');
     } catch {}
+    prefixoMensagemTabelaRef.current = 'Atualizando';
   }
 
   function falharRecebimentoRapido(mensagem: string) {
@@ -1354,8 +1393,15 @@ export default function SideNavBar() {
   async function receberDadosSankhya() {
     const iniciou = iniciarRecebimentoGlobal('SideNavBar');
     if (!iniciou) {
+      setModoRecebRapidoModal(false);
+      setDadosRecebidos(true);
+      dadosRecebidos = true;
+      setShowMensageSankhya(true);
+      setrespostaSank('Já existe um recebimento de dados em andamento. Aguarde finalizar.');
+      respostaSank = 'Já existe um recebimento de dados em andamento. Aguarde finalizar.';
       return;
     }
+    prefixoMensagemTabelaRef.current = 'Atualizando';
     const usarFluxoLeve = await usarRecebimentoRapido();
     setModoRecebRapidoModal(usarFluxoLeve);
     if (usarFluxoLeve) {
@@ -1511,11 +1557,55 @@ export default function SideNavBar() {
   }
   //==============================================================
   async function receberDadosSankhyaLote() {
-    setrespostaSank('Atualizando dados (lote)...');
-    respostaSank = 'Atualizando dados (lote)...';
+    const tabelas = [
+      'Vendedor',
+      'TipoNegociacao',
+      'Parceiro',
+      'GrupoProduto',
+      'Produto',
+      'TabelaPreco',
+      'TabelaPrecoAdicional',
+      'ItemTabela',
+      'TabelaPrecoParceiro',
+      'Titulo',
+    ];
+    prefixoMensagemTabelaRef.current = 'Atualizando';
+    const passos = [
+      { msg: mensagemTabela('Vendedor'), p: 10 },
+      { msg: mensagemTabela('TipoNegociacao'), p: 20 },
+      { msg: mensagemTabela('Parceiro', '#NavBar'), p: 30 },
+      { msg: mensagemTabela('GrupoProduto'), p: 40 },
+      { msg: mensagemTabela('Produto'), p: 50 },
+      { msg: mensagemTabela('TabelaPreco'), p: 60 },
+      { msg: mensagemTabela('TabelaPrecoAdicional'), p: 70 },
+      { msg: mensagemTabela('ItemTabela'), p: 80 },
+      { msg: mensagemTabela('TabelaPrecoParceiro'), p: 90 },
+      { msg: mensagemTabela('Titulo'), p: 100 },
+    ];
+    let idx = 0;
+    setSucess(passos[idx].p);
+    sucess = passos[idx].p;
+    setrespostaSank(passos[idx].msg);
+    respostaSank = passos[idx].msg;
+    const intervalId = window.setInterval(() => {
+      if (idx >= passos.length - 1) {
+        try {
+          window.clearInterval(intervalId);
+        } catch {}
+        return;
+      }
+      idx += 1;
+      const step = passos[idx];
+      setSucess(step.p);
+      sucess = step.p;
+      setrespostaSank(step.msg);
+      respostaSank = step.msg;
+    }, 1200);
     try {
       const response = await api.post(
-        `/api/Sankhya/ReceberDadosLote?vendedorId=${vendedorCod}`
+        `/api/Sankhya/ReceberDadosLote?vendedorId=${vendedorCod}&tabelas=${encodeURIComponent(
+          tabelas.join(',')
+        )}`
       );
       const data = (response as any)?.data;
       const resultados = Array.isArray(data?.resultados) ? data.resultados : [];
@@ -1528,8 +1618,17 @@ export default function SideNavBar() {
       setErroSankhya(true);
       erroSankhya = true;
     } finally {
-      await GetTipoNegociacao();
+      try {
+        window.clearInterval(intervalId);
+      } catch {}
     }
+    setrespostaSank('Verificando dados a serem inclusos no banco...');
+    respostaSank = 'Verificando dados a serem inclusos no banco...';
+    await new Promise((r) => setTimeout(r, 400));
+    setrespostaSank('Inserindo dados no banco local...');
+    respostaSank = 'Inserindo dados no banco local...';
+    prefixoMensagemTabelaRef.current = 'Inserindo';
+    await GetTipoNegociacao();
   }
 
   async function receberDadosSankhyaTipoNegociacao() {
@@ -1869,8 +1968,11 @@ export default function SideNavBar() {
   const [idParceiros, setidParceiros] = useState<Number[]>([]);
 
   async function GetParceiro() {
-    setrespostaSank('Atualizando Banco...');
-    respostaSank = 'Atualizando Banco...';
+    setSucess(30);
+    sucess = 30;
+    const msg = mensagemTabela('Parceiro');
+    setrespostaSank(msg);
+    respostaSank = msg;
     console.log('entrou no receber dados para banco off');
     try {
       const response = await api.get(
@@ -1893,6 +1995,11 @@ export default function SideNavBar() {
   async function GetTipoNegociacao() {
     console.log('entrou no receber dados para banco off');
     try {
+      setSucess(20);
+      sucess = 20;
+      const msg = mensagemTabela('TipoNegociacao');
+      setrespostaSank(msg);
+      respostaSank = msg;
       const response = await api.get(`/api/TipoNegociacao?pagina=1&totalpagina=999`);
       console.log('tipo nrgocio', response.data.data);
       await popularTipoNegociacao(response.data.data);
@@ -1903,6 +2010,11 @@ export default function SideNavBar() {
 
   async function GetGrupoProduto() {
     try {
+      setSucess(40);
+      sucess = 40;
+      const msg = mensagemTabela('GrupoProduto');
+      setrespostaSank(msg);
+      respostaSank = msg;
       const response = await api.get('/api/GrupoProduto?pagina=1&totalpagina=999');
       console.log('GrupoProduto', response.data.data);
       await popularGrupoProd(response.data.data);
@@ -1913,6 +2025,11 @@ export default function SideNavBar() {
 
   async function GetProduto() {
     try {
+      setSucess(50);
+      sucess = 50;
+      const msg = mensagemTabela('Produto');
+      setrespostaSank(msg);
+      respostaSank = msg;
       const response = await api.get('/api/Produto/total');
       console.log('Produto', response.data.data);
       await popularProduto(response.data.data);
@@ -1923,6 +2040,11 @@ export default function SideNavBar() {
 
   async function GetTabelaPreco() {
     try {
+      setSucess(60);
+      sucess = 60;
+      const msg = mensagemTabela('TabelaPreco');
+      setrespostaSank(msg);
+      respostaSank = msg;
       const response = await api.get('/api/TabelaPreco/total');
       console.log('TabelaPreco', response.data.data);
       await popularTabelaPreco(response.data.data);
@@ -1933,6 +2055,11 @@ export default function SideNavBar() {
 
   async function GetItemTabela() {
     try {
+      setSucess(80);
+      sucess = 80;
+      const msg = mensagemTabela('ItemTabela');
+      setrespostaSank(msg);
+      respostaSank = msg;
       const response = await api.get(
         `/api/ItemTabelaPreco/ItensTotais?vendedorId=${usuario.username}`
       );
@@ -1947,6 +2074,11 @@ export default function SideNavBar() {
 
   async function GetTabelaPrecoParceiro() {
     try {
+      setSucess(90);
+      sucess = 90;
+      const msg = mensagemTabela('TabelaPrecoParceiro');
+      setrespostaSank(msg);
+      respostaSank = msg;
       const response = await api.get(`/api/TabelaPrecoParceiro/total`);
       console.log('TabelaPrecoParceiro', response.data.data);
       await popularTabelaPrecoParceiro(response.data.data);
@@ -1981,6 +2113,11 @@ export default function SideNavBar() {
   }
   async function GetTabelaAdicional() {
     try {
+      setSucess(70);
+      sucess = 70;
+      const msg = mensagemTabela('TabelaPrecoAdicional');
+      setrespostaSank(msg);
+      respostaSank = msg;
       const response = await api.get(
         `/api/ItemTabelaPreco/tabelaAdicional?vendedorId=${usuario.username}`
       );
@@ -2001,18 +2138,28 @@ export default function SideNavBar() {
     const transaction = db.transaction('cabecalhoPedidoVenda', 'readwrite');
     const store = transaction.objectStore('cabecalhoPedidoVenda');
 
-    const allCabecalhos = await store.getAll();
+    let cursor = await store.openCursor();
+    while (cursor) {
+      if ((cursor.value as any)?.sincronizado === 'S') {
+        await cursor.delete();
+      }
+      cursor = await cursor.continue();
+    }
 
-    const deleteCabecalho = allCabecalhos.filter(
-      (item) => item.sincronizado === 'S'
-    );
-    for (const cabecalho of deleteCabecalho) {
-      await store.delete(cabecalho.id);
+    const unsyncedIds = new Set<number>();
+    cursor = await store.openCursor();
+    while (cursor) {
+      if ((cursor.value as any)?.sincronizado !== 'S') {
+        unsyncedIds.add(Number(cursor.primaryKey));
+      }
+      cursor = await cursor.continue();
     }
 
     for (const cabecalho of cabecalhoPedido) {
-      cabecalho.sincronizado = 'S';
-      await store.add(cabecalho);
+      const id = Number((cabecalho as any)?.id);
+      if (Number.isFinite(id) && unsyncedIds.has(id)) continue;
+      (cabecalho as any).sincronizado = 'S';
+      await store.put(cabecalho as any);
     }
 
     await transaction.done;
@@ -2024,16 +2171,28 @@ export default function SideNavBar() {
     const transaction = db.transaction('itemPedidoVenda', 'readwrite');
     const store = transaction.objectStore('itemPedidoVenda');
 
-    const allItens = await store.getAll();
+    let cursor = await store.openCursor();
+    while (cursor) {
+      if ((cursor.value as any)?.sincronizado === 'S') {
+        await cursor.delete();
+      }
+      cursor = await cursor.continue();
+    }
 
-    const deleteItens = allItens.filter((item) => item.sincronizado === 'S');
-    for (const item of deleteItens) {
-      await store.delete(item.id);
+    const unsyncedIds = new Set<number>();
+    cursor = await store.openCursor();
+    while (cursor) {
+      if ((cursor.value as any)?.sincronizado !== 'S') {
+        unsyncedIds.add(Number(cursor.primaryKey));
+      }
+      cursor = await cursor.continue();
     }
 
     for (const item of itemPedido) {
-      item.sincronizado = 'S';
-      await store.add(item);
+      const id = Number((item as any)?.id);
+      if (Number.isFinite(id) && unsyncedIds.has(id)) continue;
+      (item as any).sincronizado = 'S';
+      await store.put(item as any);
     }
 
     await transaction.done;
@@ -2149,6 +2308,24 @@ export default function SideNavBar() {
     ];
     atualizadoEm: string;
   }
+  async function replaceStoreInChunks(
+    store: any,
+    rows: any[],
+    options?: { chunkSize?: number; beforeWrite?: (row: any, index: number) => void }
+  ) {
+    const chunkSize = Math.max(1, Number(options?.chunkSize ?? 500));
+    await store.clear();
+    for (let start = 0; start < rows.length; start += chunkSize) {
+      const chunk = rows.slice(start, start + chunkSize);
+      if (options?.beforeWrite) {
+        for (let i = 0; i < chunk.length; i++) {
+          options.beforeWrite(chunk[i], start + i);
+        }
+      }
+      await Promise.all(chunk.map((row: any) => store.put(row)));
+    }
+  }
+
   async function popularParceiro(parceiros: iParceiro[]) {
     const dataPedidoAtual = new Date();
     const ano = dataPedidoAtual.getFullYear();
@@ -2164,22 +2341,12 @@ export default function SideNavBar() {
     const store = transaction.objectStore('parceiro');
 
     try {
-      await store.clear();
-
-      for (const parceiro of parceiros) {
-        parceiro.atualizadoEm = dataPedidoNovo;
-        await store.add(parceiro);
-      }
-
-      const registrosInseridos = await store.count();
-
-      if (registrosInseridos !== parceiros.length) {
-        await store.clear();
-        for (const parceiro of parceiros) {
+      await replaceStoreInChunks(store, parceiros as any[], {
+        chunkSize: 500,
+        beforeWrite: (parceiro) => {
           parceiro.atualizadoEm = dataPedidoNovo;
-          await store.add(parceiro);
-        }
-      }
+        },
+      });
     } catch (error) {
       console.error('Erro ao popular dados:', error);
       setrespostaSank('Erro ao popular dados.');
@@ -2207,20 +2374,7 @@ export default function SideNavBar() {
     const store = transaction.objectStore('tipoNegociacao');
 
     try {
-      await store.clear();
-
-      for (const tipo of tipos) {
-        await store.add(tipo);
-      }
-
-      const registrosInseridos = await store.count();
-
-      if (registrosInseridos !== tipos.length) {
-        await store.clear();
-        for (const tipo of tipos) {
-          await store.add(tipo);
-        }
-      }
+      await replaceStoreInChunks(store, tipos as any[], { chunkSize: 500 });
     } catch (error) {
       console.error('Erro ao popular dados:', error);
       setrespostaSank('Erro ao popular dados.');
@@ -2244,20 +2398,7 @@ export default function SideNavBar() {
     const store = transaction.objectStore('grupoProduto');
 
     try {
-      await store.clear();
-
-      for (const grupo of grupoProduto) {
-        await store.add(grupo);
-      }
-
-      const registrosInseridos = await store.count();
-
-      if (registrosInseridos !== grupoProduto.length) {
-        await store.clear();
-        for (const grupo of grupoProduto) {
-          await store.add(grupo);
-        }
-      }
+      await replaceStoreInChunks(store, grupoProduto as any[], { chunkSize: 500 });
     } catch (error) {
       console.error('Erro ao popular dados:', error);
       setrespostaSank('Erro ao popular dados.');
@@ -2291,20 +2432,7 @@ export default function SideNavBar() {
     const transaction = db.transaction('produto', 'readwrite');
     const store = transaction.objectStore('produto');
     try {
-      await store.clear();
-
-      for (const prod of produto) {
-        await store.add(prod);
-      }
-
-      const registrosInseridos = await store.count();
-
-      if (registrosInseridos !== produto.length) {
-        await store.clear();
-        for (const prod of produto) {
-          await store.add(prod);
-        }
-      }
+      await replaceStoreInChunks(store, produto as any[], { chunkSize: 500 });
     } catch (error) {
       console.error('Erro ao popular dados:', error);
       setrespostaSank('Erro ao popular dados.');
@@ -2345,20 +2473,7 @@ export default function SideNavBar() {
     const store = transaction.objectStore('tabelaPreco');
 
     try {
-      await store.clear();
-
-      for (const tabela of tabelaPreco) {
-        await store.add(tabela);
-      }
-
-      const registrosInseridos = await store.count();
-
-      if (registrosInseridos !== tabelaPreco.length) {
-        await store.clear();
-        for (const tabela of tabelaPreco) {
-          await store.add(tabela);
-        }
-      }
+      await replaceStoreInChunks(store, tabelaPreco as any[], { chunkSize: 250 });
     } catch (error) {
       console.error('Erro ao popular dados:', error);
       setrespostaSank('Erro ao popular dados.');
@@ -2398,20 +2513,7 @@ export default function SideNavBar() {
     const store = transaction.objectStore('itemTabela');
 
     try {
-      await store.clear();
-
-      for (const tabela of itemTabela) {
-        await store.add(tabela);
-      }
-
-      const registrosInseridos = await store.count();
-
-      if (registrosInseridos !== itemTabela.length) {
-        await store.clear();
-        for (const tabela of itemTabela) {
-          await store.add(tabela);
-        }
-      }
+      await replaceStoreInChunks(store, itemTabela as any[], { chunkSize: 500 });
     } catch (error) {
       console.error('Erro ao popular dados:', error);
       setrespostaSank('Erro ao popular dados.');
@@ -2475,20 +2577,7 @@ export default function SideNavBar() {
     const store = transaction.objectStore('tabelaPrecoParceiro');
 
     try {
-      await store.clear();
-
-      for (const tabela of tabelaPrecoParceiro) {
-        await store.add(tabela);
-      }
-
-      const registrosInseridos = await store.count();
-
-      if (registrosInseridos !== tabelaPrecoParceiro.length) {
-        await store.clear();
-        for (const tabela of tabelaPrecoParceiro) {
-          await store.add(tabela);
-        }
-      }
+      await replaceStoreInChunks(store, tabelaPrecoParceiro as any[], { chunkSize: 250 });
     } catch (error) {
       console.error('Erro ao popular dados:', error);
       setrespostaSank('Erro ao popular dados.');
@@ -2512,47 +2601,15 @@ export default function SideNavBar() {
 
   async function GetTitulo() {
     try {
-      setrespostaSank('Atualizando Títulos...');
-      respostaSank = 'Atualizando Títulos...';
+      setSucess(100);
+      sucess = 100;
+      const msg = mensagemTabela('Titulo');
+      setrespostaSank(msg);
+      respostaSank = msg;
       const codVend = usuario.username;
-      const sql = `SELECT FIN.CODEMP as EmpresaId
-                , FIN.CODPARC as ParceiroId
-                , FIN.NUNOTA as NuUnico
-                , FIN.DESDOBRAMENTO as Parcela
-                , CONVERT(DATE,FIN.DTNEG) as DataEmissao
-                , CONVERT(DATE,FIN.DTVENC) as DataVencim
-                , FIN.VLRDESDOB as Valor
-
-                FROM TGFFIN FIN 
-                JOIN TGFCAB CAB ON CAB.NUNOTA = FIN.NUNOTA
-                JOIN TGFPAR PAR ON FIN.CODPARC = PAR.CODPARC
-                WHERE (VLRDESDOB-(VLRBAIXA+VLRDESC)) > 0
-                  AND PAR.ATIVO = 'S'
-                  AND PROVISAO = 'N'
-                  AND FIN.RECDESP = 1
-                  AND FIN.DHBAIXA IS NULL
-                  AND FIN.CODTIPTIT IN (0,4)
-                  AND FIN.CODTIPOPER NOT IN (1020,5016,5019,5029)
-                  AND CONVERT(DATE,FIN.DTVENC) < convert(date,dateadd(day, -3, getdate()))
-                  AND FIN.CODVEND = ${codVend}
-                  AND FIN.CODPARC NOT IN (471,512,589,1293)`;
-      const response = await api.post(
-        `/api/Sankhya/DadosDashSankhya?sql=${encodeURIComponent(sql)}`
-      );
-      const rows = (response as any)?.data?.responseBody?.rows ?? [];
-      const result: iTitulo[] = rows.map((curr: any, idx: number) => {
-        return {
-          id: idx + 1,
-          empresaId: curr[0],
-          parceiroId: curr[1],
-          nuUnico: curr[2],
-          parcela: curr[3],
-          dataEmissao: curr[4],
-          dataVencim: curr[5],
-          valor: curr[6],
-        };
-      });
-      await popularTitulo(result);
+      const response = await api.get(`/api/Parceiro/titulos?codVendedor=${codVend}`);
+      const data = (response as any)?.data?.data ?? [];
+      await popularTitulo(data);
     } catch {}
   }
 
@@ -2562,22 +2619,12 @@ export default function SideNavBar() {
     const store = transaction.objectStore('titulo');
 
     try {
-      await store.clear();
-      let idIncremental = 1;
-      for (const t of titulo) {
-        t.id = idIncremental++;
-        await store.add(t);
-      }
-
-      const registrosInseridos = await store.count();
-      if (registrosInseridos !== titulo.length) {
-        await store.clear();
-        idIncremental = 1;
-        for (const t of titulo) {
-          t.id = idIncremental++;
-          await store.add(t);
-        }
-      }
+      await replaceStoreInChunks(store, titulo as any[], {
+        chunkSize: 500,
+        beforeWrite: (t, index) => {
+          t.id = index + 1;
+        },
+      });
     } catch (error) {
       console.error('Erro ao popular dados:', error);
       setrespostaSank('Erro ao popular dados.');
@@ -2604,20 +2651,7 @@ export default function SideNavBar() {
     const store = transaction.objectStore('tabelaPrecoAdicional');
 
     try {
-      await store.clear();
-
-      for (const tabela of tabelaAdicional) {
-        await store.add(tabela);
-      }
-
-      const registrosInseridos = await store.count();
-
-      if (registrosInseridos !== tabelaAdicional.length) {
-        await store.clear();
-        for (const tabela of tabelaAdicional) {
-          await store.add(tabela);
-        }
-      }
+      await replaceStoreInChunks(store, tabelaAdicional as any[], { chunkSize: 500 });
     } catch (error) {
       console.error('Erro ao popular dados:', error);
       setrespostaSank('Erro ao popular dados.');

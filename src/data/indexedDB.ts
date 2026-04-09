@@ -657,3 +657,27 @@ export async function criarBancoDados() {
     throw e;
   }
 }
+
+export async function limparBancoLocalPreservando(storesParaPreservar: string[]) {
+  const preservar = new Set((storesParaPreservar || []).map((s) => String(s)));
+  const db = await openDB<PgamobileDB>('pgamobile', versao);
+  try {
+    const storeNames = Array.from(db.objectStoreNames);
+    const storesParaLimpar = storeNames.filter((s) => !preservar.has(s));
+    for (const storeName of storesParaLimpar) {
+      try {
+        const tx = db.transaction(storeName as any, 'readwrite');
+        await tx.objectStore(storeName as any).clear();
+        await tx.done;
+      } catch {}
+    }
+  } finally {
+    try {
+      db.close();
+    } catch {}
+  }
+}
+
+export async function limparBancoLocalMantendoPedidos() {
+  await limparBancoLocalPreservando(['cabecalhoPedidoVenda', 'itemPedidoVenda']);
+}

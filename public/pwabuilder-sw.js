@@ -1,6 +1,6 @@
 
-const CACHE = "pwabuilder-offline-V85";
-const CACHE_ASSETS = "pwabuilder-assets-V85";
+const CACHE = "pwabuilder-offline-V87";
+const CACHE_ASSETS = "pwabuilder-assets-V87";
 const APP_SHELL_URLS = ["/pga/", "/pga/index.html"];
 const OFFLINE_FALLBACK_URL = "/pga/";
 

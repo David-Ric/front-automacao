@@ -18,10 +18,10 @@ const resolveBaseURL = (): string => {
 };
 
 const api = axios.create({
-  //baseURL: 'https://pga.cigel.com.br:8095/',
+  baseURL: 'https://pga.cigel.com.br:8095/',
   //baseURL: 'http://10.0.0.158:8091/',
   //baseURL: resolveBaseURL(),
-  baseURL: 'https://localhost:8095/',
+  //baseURL: 'https://localhost:8095/',
   headers: {
     'Content-type': 'application/json',
   },

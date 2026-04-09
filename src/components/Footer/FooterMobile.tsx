@@ -485,6 +485,8 @@ export default function FooterMobile() {
 
   const [showMensageSankhya, setShowMensageSankhya] = useState(false);
   const [modoRecebRapidoModal, setModoRecebRapidoModal] = useState(false);
+  const [avisoRecebimentoEmAndamento, setAvisoRecebimentoEmAndamento] =
+    useState(false);
   const [showMensageDelete, setShowMensageDelete] = useState(false);
 
   let [erroSankhya, setErroSankhya] = useState(false);
@@ -540,6 +542,10 @@ export default function FooterMobile() {
   function handleCloseMensageSankhya() {
     setShowMensageSankhya(false);
     setModoRecebRapidoModal(false);
+    if (avisoRecebimentoEmAndamento) {
+      setAvisoRecebimentoEmAndamento(false);
+      return;
+    }
     const emDigitacao =
       localStorage.getItem('@Portal/PedidoEmDigitacao') === 'true';
     const onPedido =
@@ -1169,7 +1175,20 @@ async function popularProd(produto: iproduto[]) {
   //============RECEBER DADOS MOBILE==============================
   function iniciarRecebimentoGlobal(origem: string): boolean {
     try {
-      if (localStorage.getItem('RecebendoDados') === 'true') return false;
+      if (localStorage.getItem('RecebendoDados') === 'true') {
+        const startedAtRaw = localStorage.getItem('RecebendoDadosStartedAt');
+        const startedAt = startedAtRaw != null ? Number(startedAtRaw) : NaN;
+        const stale =
+          !Number.isFinite(startedAt) || Date.now() - startedAt > 10 * 60 * 1000;
+        if (stale) {
+          localStorage.removeItem('RecebendoDados');
+          localStorage.removeItem('RecebendoDadosSource');
+          localStorage.removeItem('RecebendoDadosStartedAt');
+          localStorage.removeItem('RecebendoDadosModal');
+        } else {
+          return false;
+        }
+      }
       localStorage.setItem('RecebendoDados', 'true');
       localStorage.setItem('RecebendoDadosSource', origem);
       localStorage.setItem('RecebendoDadosStartedAt', String(Date.now()));
@@ -1181,9 +1200,10 @@ async function popularProd(produto: iproduto[]) {
 
   function finalizarRecebimentoGlobal() {
     try {
-      finalizarRecebimentoGlobal();
+      localStorage.removeItem('RecebendoDados');
       localStorage.removeItem('RecebendoDadosSource');
       localStorage.removeItem('RecebendoDadosStartedAt');
+      localStorage.removeItem('RecebendoDadosModal');
     } catch {}
   }
 
@@ -1199,6 +1219,13 @@ async function popularProd(produto: iproduto[]) {
   async function receberDadosSankhya() {
     const iniciou = iniciarRecebimentoGlobal('FooterMobile');
     if (!iniciou) {
+      setModoRecebRapidoModal(false);
+      setDadosRecebidos(true);
+      dadosRecebidos = true;
+      setShowMensageSankhya(true);
+      setrespostaSank('Já existe um recebimento de dados em andamento. Aguarde finalizar.');
+      respostaSank = 'Já existe um recebimento de dados em andamento. Aguarde finalizar.';
+      setAvisoRecebimentoEmAndamento(true);
       return;
     }
     const usarFluxoLeve = await ExisteHoraReceberDadosConfiguracao();

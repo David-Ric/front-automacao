@@ -3342,7 +3342,20 @@ function PedidoVendas() {
 
   function iniciarRecebimentoGlobal(origem: string): boolean {
     try {
-      if (localStorage.getItem('RecebendoDados') === 'true') return false;
+      if (localStorage.getItem('RecebendoDados') === 'true') {
+        const startedAtRaw = localStorage.getItem('RecebendoDadosStartedAt');
+        const startedAt = startedAtRaw != null ? Number(startedAtRaw) : NaN;
+        const stale =
+          !Number.isFinite(startedAt) || Date.now() - startedAt > 10 * 60 * 1000;
+        if (stale) {
+          localStorage.removeItem('RecebendoDados');
+          localStorage.removeItem('RecebendoDadosSource');
+          localStorage.removeItem('RecebendoDadosStartedAt');
+          localStorage.removeItem('RecebendoDadosModal');
+        } else {
+          return false;
+        }
+      }
       localStorage.setItem('RecebendoDados', 'true');
       localStorage.setItem('RecebendoDadosSource', origem);
       localStorage.setItem('RecebendoDadosStartedAt', String(Date.now()));
@@ -3357,28 +3370,73 @@ function PedidoVendas() {
       localStorage.removeItem('RecebendoDados');
       localStorage.removeItem('RecebendoDadosSource');
       localStorage.removeItem('RecebendoDadosStartedAt');
+      localStorage.removeItem('RecebendoDadosModal');
     } catch {}
   }
 
   async function receberDadosSankhyaLote() {
-    setrespostaSank('Atualizando dados (lote)...');
-    respostaSank = 'Atualizando dados (lote)...';
+    const tabelas =
+      'Vendedor,TipoNegociacao,Parceiro,GrupoProduto,Produto,TabelaPreco,TabelaPrecoAdicional,ItemTabela,TabelaPrecoParceiro,Titulo';
+    const passos = [
+      { msg: 'Atualizando Vendedor...', p: 10 },
+      { msg: 'Atualizando TipoNegociacao...', p: 20 },
+      { msg: 'Atualizando Parceiro...#Pedido', p: 30 },
+      { msg: 'Atualizando GrupoProduto...', p: 40 },
+      { msg: 'Atualizando Produto...', p: 50 },
+      { msg: 'Atualizando TabelaPreco...', p: 60 },
+      { msg: 'Atualizando TabelaPrecoAdicional...', p: 70 },
+      { msg: 'Atualizando ItemTabela...', p: 80 },
+      { msg: 'Atualizando TabelaPrecoParceiro...', p: 90 },
+      { msg: 'Atualizando Titulo...', p: 100 },
+    ];
+    let idx = 0;
+    setSucess(passos[idx].p);
+    sucess = passos[idx].p;
+    setrespostaSank(passos[idx].msg);
+    respostaSank = passos[idx].msg;
+    const intervalId = window.setInterval(() => {
+      if (idx >= passos.length - 1) {
+        try {
+          window.clearInterval(intervalId);
+        } catch {}
+        return;
+      }
+      idx += 1;
+      const step = passos[idx];
+      setSucess(step.p);
+      sucess = step.p;
+      setrespostaSank(step.msg);
+      respostaSank = step.msg;
+    }, 1200);
     try {
-      const tabelas =
-        'Vendedor,TipoNegociacao,Parceiro,GrupoProduto,Produto,TabelaPreco,ItemTabela,TabelaPrecoParceiro,Titulo';
       await api.post(
         `/api/Sankhya/ReceberDadosLote?vendedorId=${vendedorCod}&tabelas=${encodeURIComponent(tabelas)}`
       );
     } catch {
       setErroSankhya(true);
       erroSankhya = true;
+    } finally {
+      try {
+        window.clearInterval(intervalId);
+      } catch {}
     }
+    setrespostaSank('Verificando dados a serem inclusos no banco...');
+    respostaSank = 'Verificando dados a serem inclusos no banco...';
+    await new Promise((r) => setTimeout(r, 400));
+    setrespostaSank('Inserindo dados no banco local...');
+    respostaSank = 'Inserindo dados no banco local...';
   }
 
   async function receberDadosSankhyaWeb() {
     console.log('recebendo dados', vendedorCod);
     const iniciou = iniciarRecebimentoGlobal('PedidoWeb');
     if (!iniciou) {
+      setModoRecebRapidoModal(false);
+      setDadosRecebidos(true);
+      dadosRecebidos = true;
+      setShowMensageSankhya(true);
+      setrespostaSank('Já existe um recebimento de dados em andamento. Aguarde finalizar.');
+      respostaSank = 'Já existe um recebimento de dados em andamento. Aguarde finalizar.';
       return;
     }
     try {
@@ -3427,7 +3485,7 @@ function PedidoVendas() {
     respostaSank = 'Verificando conexão...';
     try {
       await receberDadosSankhyaLote();
-      await GetParceiro();
+      await popularBancoLocalApiLevePedido(String(usuario.username || '').trim(), 'Inserindo');
     } catch (error) {
       setLoading(false);
       console.log('erro ao efetuar login não mobile');
@@ -3951,6 +4009,12 @@ function PedidoVendas() {
   async function receberDadosSankhyaMobile() {
     const iniciou = iniciarRecebimentoGlobal('PedidoMobile');
     if (!iniciou) {
+      setModoRecebRapidoModal(false);
+      setDadosRecebidos(true);
+      dadosRecebidos = true;
+      setShowMensageSankhya(true);
+      setrespostaSank('Já existe um recebimento de dados em andamento. Aguarde finalizar.');
+      respostaSank = 'Já existe um recebimento de dados em andamento. Aguarde finalizar.';
       return;
     }
     try {
@@ -4989,6 +5053,12 @@ WHERE PRO.CODPROD <> 0 AND PRO.USOPROD IN ('V','R')`;
   async function receberDadosApiLevePedido() {
     const iniciou = iniciarRecebimentoGlobal('PedidoApiLeve');
     if (!iniciou) {
+      setModoRecebRapidoModal(false);
+      setDadosRecebidos(true);
+      dadosRecebidos = true;
+      setShowMensageSankhya(true);
+      setrespostaSank('Já existe um recebimento de dados em andamento. Aguarde finalizar.');
+      respostaSank = 'Já existe um recebimento de dados em andamento. Aguarde finalizar.';
       return;
     }
     try {
@@ -5007,67 +5077,7 @@ WHERE PRO.CODPROD <> 0 AND PRO.USOPROD IN ('V','R')`;
 
     const codVendedor = String(usuario.username || '').trim();
     try {
-      const respParceiro = await api.get(
-        `/api/Parceiro/total?codVendedor=${codVendedor}`
-      );
-      const listaParceiro = Array.isArray((respParceiro as any)?.data?.data)
-        ? (respParceiro as any).data.data
-        : [];
-      const parceiros = listaParceiro.filter(
-        (p: any) => String(p?.vendedorId) == codVendedor && p?.status == 'S'
-      );
-      await popularParceiroApi(parceiros);
-      await popularTituloApiFromParceiros(parceiros);
-
-      const respTipoNeg = await api.get(
-        `/api/TipoNegociacao?pagina=1&totalpagina=999`
-      );
-      const tipos = Array.isArray((respTipoNeg as any)?.data?.data)
-        ? (respTipoNeg as any).data.data
-        : [];
-      await popularTipoNegociacaoApi(tipos);
-
-      const respGrupo = await api.get(`/api/GrupoProduto?pagina=1&totalpagina=999`);
-      const grupos = Array.isArray((respGrupo as any)?.data?.data)
-        ? (respGrupo as any).data.data
-        : [];
-      await popularGrupoProdutoApi(grupos);
-
-      const respProd = await api.get(`/api/Produto/total`);
-      const produtos = Array.isArray((respProd as any)?.data?.data)
-        ? (respProd as any).data.data
-        : [];
-      await popularProdutoApi(produtos);
-
-      const respTabPreco = await api.get(`/api/TabelaPreco/total`);
-      const tabelasPreco = Array.isArray((respTabPreco as any)?.data?.data)
-        ? (respTabPreco as any).data.data
-        : [];
-      await popularTabelaPrecoApi(tabelasPreco);
-
-      const respItemTabela = await api.get(
-        `/api/ItemTabelaPreco/ItensTotais?vendedorId=${codVendedor}`
-      );
-      const itensTabela = Array.isArray((respItemTabela as any)?.data?.data)
-        ? (respItemTabela as any).data.data
-        : [];
-      await popularItemTabelaApi(itensTabela);
-
-      const respTabParc = await api.get(`/api/TabelaPrecoParceiro/total`);
-      const tabParc = Array.isArray((respTabParc as any)?.data?.data)
-        ? (respTabParc as any).data.data
-        : [];
-      await popularTabelaPrecoParceiroApi(tabParc);
-
-      await GetCabecalho();
-
-      const respAdicional = await api.get(
-        `/api/ItemTabelaPreco/tabelaAdicional?vendedorId=${codVendedor}`
-      );
-      const adicional = Array.isArray((respAdicional as any)?.data?.data)
-        ? (respAdicional as any).data.data
-        : [];
-      await popularTabelaAdicionalApi(adicional);
+      await popularBancoLocalApiLevePedido(codVendedor, 'Atualizando');
     } catch {
       setrespostaSank('Erro ao atualizar banco.');
       respostaSank = 'Erro ao atualizar banco.';
@@ -5076,6 +5086,125 @@ WHERE PRO.CODPROD <> 0 AND PRO.USOPROD IN ('V','R')`;
         setShowMensageSankhya(false);
       }, 3000);
     }
+  }
+
+  async function popularBancoLocalApiLevePedido(
+    codVendedor: string,
+    prefixo: 'Atualizando' | 'Inserindo' = 'Atualizando'
+  ) {
+    function msgTabela(nome: string, tag?: string) {
+      const sufixo = prefixo === 'Inserindo' ? ' no banco local' : '';
+      const extra = tag ? `...${tag}` : '...';
+      return `${prefixo} ${nome}${sufixo}${extra}`;
+    }
+
+    setSucess(20);
+    sucess = 20;
+    setrespostaSank(msgTabela('TipoNegociacao'));
+    respostaSank = msgTabela('TipoNegociacao');
+    const respTipoNeg = await api.get(`/api/TipoNegociacao?pagina=1&totalpagina=999`);
+    const tipos = Array.isArray((respTipoNeg as any)?.data?.data)
+      ? (respTipoNeg as any).data.data
+      : [];
+    await popularTipoNegociacaoApi(tipos);
+
+    setSucess(30);
+    sucess = 30;
+    setrespostaSank(msgTabela('Parceiro', '#Pedido'));
+    respostaSank = msgTabela('Parceiro', '#Pedido');
+    const respParceiro = await api.get(`/api/Parceiro/total?codVendedor=${codVendedor}`);
+    const listaParceiro = Array.isArray((respParceiro as any)?.data?.data)
+      ? (respParceiro as any).data.data
+      : [];
+    const parceiros = listaParceiro.filter(
+      (p: any) => String(p?.vendedorId) == codVendedor && p?.status == 'S'
+    );
+    await popularParceiroApi(parceiros);
+
+    setSucess(40);
+    sucess = 40;
+    setrespostaSank(msgTabela('GrupoProduto'));
+    respostaSank = msgTabela('GrupoProduto');
+    const respGrupo = await api.get(`/api/GrupoProduto?pagina=1&totalpagina=999`);
+    const grupos = Array.isArray((respGrupo as any)?.data?.data)
+      ? (respGrupo as any).data.data
+      : [];
+    await popularGrupoProdutoApi(grupos);
+
+    setSucess(50);
+    sucess = 50;
+    setrespostaSank(msgTabela('Produto'));
+    respostaSank = msgTabela('Produto');
+    const respProd = await api.get(`/api/Produto/total`);
+    const produtos = Array.isArray((respProd as any)?.data?.data)
+      ? (respProd as any).data.data
+      : [];
+    await popularProdutoApi(produtos);
+
+    setSucess(60);
+    sucess = 60;
+    setrespostaSank(msgTabela('TabelaPreco'));
+    respostaSank = msgTabela('TabelaPreco');
+    const respTabPreco = await api.get(`/api/TabelaPreco/total`);
+    const tabelasPreco = Array.isArray((respTabPreco as any)?.data?.data)
+      ? (respTabPreco as any).data.data
+      : [];
+    await popularTabelaPrecoApi(tabelasPreco);
+
+    setSucess(70);
+    sucess = 70;
+    setrespostaSank(msgTabela('TabelaPrecoAdicional'));
+    respostaSank = msgTabela('TabelaPrecoAdicional');
+    const respAdicional = await api.get(
+      `/api/ItemTabelaPreco/tabelaAdicional?vendedorId=${codVendedor}`
+    );
+    const adicional = Array.isArray((respAdicional as any)?.data?.data)
+      ? (respAdicional as any).data.data
+      : [];
+    await popularTabelaAdicionalApi(adicional, false);
+
+    setSucess(80);
+    sucess = 80;
+    setrespostaSank(msgTabela('ItemTabela'));
+    respostaSank = msgTabela('ItemTabela');
+    const respItemTabela = await api.get(
+      `/api/ItemTabelaPreco/ItensTotais?vendedorId=${codVendedor}`
+    );
+    const itensTabela = Array.isArray((respItemTabela as any)?.data?.data)
+      ? (respItemTabela as any).data.data
+      : [];
+    await popularItemTabelaApi(itensTabela);
+
+    setSucess(90);
+    sucess = 90;
+    setrespostaSank(msgTabela('TabelaPrecoParceiro'));
+    respostaSank = msgTabela('TabelaPrecoParceiro');
+    const respTabParc = await api.get(`/api/TabelaPrecoParceiro/total`);
+    const tabParc = Array.isArray((respTabParc as any)?.data?.data)
+      ? (respTabParc as any).data.data
+      : [];
+    await popularTabelaPrecoParceiroApi(tabParc);
+
+    await GetCabecalho();
+
+    setSucess(100);
+    sucess = 100;
+    setrespostaSank(msgTabela('Titulo'));
+    respostaSank = msgTabela('Titulo');
+    await popularTituloApiFromParceiros(parceiros);
+
+    finalizarRecebimentoGlobal();
+    setrespostaSank('Dados Recebidos!');
+    respostaSank = 'Dados Recebidos!';
+    try {
+      const iniciouRecebimento = localStorage.getItem('RecebendoDadosModal') === 'true';
+      if (iniciouRecebimento) {
+        localStorage.removeItem('RecebendoDadosModal');
+        setTimeout(() => {
+          window.location.reload();
+        }, 800);
+      }
+    } catch {}
   }
 
   async function popularParceiroApi(parceiros: any[]) {
@@ -5284,9 +5413,14 @@ WHERE PRO.CODPROD <> 0 AND PRO.USOPROD IN ('V','R')`;
     }
   }
 
-  async function popularTabelaAdicionalApi(tabelaAdicional: any[]) {
-    setSucess(130);
-    sucess = 130;
+  async function popularTabelaAdicionalApi(
+    tabelaAdicional: any[],
+    finalizarFluxo: boolean = true
+  ) {
+    if (finalizarFluxo) {
+      setSucess(130);
+      sucess = 130;
+    }
     setShowMensageLoading(false);
     setShowMensageLoadingDup(false);
 
@@ -5308,19 +5442,21 @@ WHERE PRO.CODPROD <> 0 AND PRO.USOPROD IN ('V','R')`;
     } finally {
       await transaction.done;
       await db.close();
-      finalizarRecebimentoGlobal();
-      setrespostaSank('Dados Recebidos!');
-      respostaSank = 'Dados Recebidos!';
-      try {
-        const iniciouRecebimento =
-          localStorage.getItem('RecebendoDadosModal') === 'true';
-        if (iniciouRecebimento) {
-          localStorage.removeItem('RecebendoDadosModal');
-          setTimeout(() => {
-            window.location.reload();
-          }, 800);
-        }
-      } catch {}
+      if (finalizarFluxo) {
+        finalizarRecebimentoGlobal();
+        setrespostaSank('Dados Recebidos!');
+        respostaSank = 'Dados Recebidos!';
+        try {
+          const iniciouRecebimento =
+            localStorage.getItem('RecebendoDadosModal') === 'true';
+          if (iniciouRecebimento) {
+            localStorage.removeItem('RecebendoDadosModal');
+            setTimeout(() => {
+              window.location.reload();
+            }, 800);
+          }
+        } catch {}
+      }
     }
   }
 

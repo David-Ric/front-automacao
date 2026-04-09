@@ -26,7 +26,12 @@ import {
   atualizaCartaoHome,
   atualizarConstantes,
 } from '../../provider/PortalContext';
-import { criarBancoDados, versao, versaoFront } from '../../data/indexedDB';
+import {
+  criarBancoDados,
+  limparBancoLocalMantendoPedidos,
+  versao,
+  versaoFront,
+} from '../../data/indexedDB';
 import { openDB, DBSchema } from 'idb';
 
 
@@ -1110,24 +1115,8 @@ export default function Home() {
   }
 
   async function deleteIndexedDB() {
-    return new Promise<void>((resolve, reject) => {
-      const request = indexedDB.deleteDatabase('pgamobile');
-
-      request.onsuccess = () => {
-        resolve();
-        window.location.reload();
-      };
-
-      request.onerror = () => {
-        reject(new Error('Erro ao excluir o banco de dados.'));
-      };
-
-      request.onblocked = () => {
-        reject(
-          new Error('O banco de dados está bloqueado por outra transação.')
-        );
-      };
-    });
+    await limparBancoLocalMantendoPedidos();
+    window.location.reload();
   }
 
   function SucessOff() {
