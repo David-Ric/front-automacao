@@ -10,7 +10,7 @@ import Footer from '../../components/Footer/Footer';
 import { RedirectFunction } from 'react-router';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Logo from '../../assets/logo-dark.png';
-import logoSankhya from '../../assets/logo-dark.png';
+import logoSankhya from '../../assets/logosankhya.png';
 import logoAlyne from '../../assets/logo-dark.png';
 import api from '../../services/api';
 import Alert from '../../components/Alert';
@@ -5011,14 +5011,18 @@ WHERE PRO.CODPROD <> 0 AND PRO.USOPROD IN ('V','R')`;
       setrespostaSank('Dados Recebidos!');
       respostaSank = 'Dados Recebidos!';
       try {
-        const iniciouRecebimento = localStorage.getItem('RecebendoDadosModal') === 'true';
-        if (iniciouRecebimento) {
-          localStorage.removeItem('RecebendoDadosModal');
-          setTimeout(() => {
-            window.location.reload();
-          }, 800);
-        }
+        localStorage.setItem(
+          '@Portal/RecebimentoLocal/ultimoSucessoEm',
+          new Date().toISOString()
+        );
+        localStorage.setItem('@Portal/RecebimentoLocal/tabelasComErro', '[]');
       } catch {}
+      try {
+        localStorage.removeItem('RecebendoDadosModal');
+      } catch {}
+      setTimeout(() => {
+        window.location.reload();
+      }, 800);
     }
   }
 
@@ -5194,16 +5198,22 @@ WHERE PRO.CODPROD <> 0 AND PRO.USOPROD IN ('V','R')`;
     await popularTituloApiFromParceiros(parceiros);
 
     finalizarRecebimentoGlobal();
+    setSucess(100);
+    sucess = 100;
     setrespostaSank('Dados Recebidos!');
     respostaSank = 'Dados Recebidos!';
     try {
-      const iniciouRecebimento = localStorage.getItem('RecebendoDadosModal') === 'true';
-      if (iniciouRecebimento) {
-        localStorage.removeItem('RecebendoDadosModal');
-        setTimeout(() => {
-          window.location.reload();
-        }, 800);
-      }
+      localStorage.setItem(
+        '@Portal/RecebimentoLocal/ultimoSucessoEm',
+        new Date().toISOString()
+      );
+      localStorage.setItem('@Portal/RecebimentoLocal/tabelasComErro', '[]');
+    } catch {}
+    try {
+      localStorage.removeItem('RecebendoDadosModal');
+      setTimeout(() => {
+        window.location.reload();
+      }, 800);
     } catch {}
   }
 
@@ -5447,15 +5457,18 @@ WHERE PRO.CODPROD <> 0 AND PRO.USOPROD IN ('V','R')`;
         setrespostaSank('Dados Recebidos!');
         respostaSank = 'Dados Recebidos!';
         try {
-          const iniciouRecebimento =
-            localStorage.getItem('RecebendoDadosModal') === 'true';
-          if (iniciouRecebimento) {
-            localStorage.removeItem('RecebendoDadosModal');
-            setTimeout(() => {
-              window.location.reload();
-            }, 800);
-          }
+          localStorage.setItem(
+            '@Portal/RecebimentoLocal/ultimoSucessoEm',
+            new Date().toISOString()
+          );
+          localStorage.setItem('@Portal/RecebimentoLocal/tabelasComErro', '[]');
         } catch {}
+        try {
+          localStorage.removeItem('RecebendoDadosModal');
+        } catch {}
+        setTimeout(() => {
+          window.location.reload();
+        }, 800);
       }
     }
   }

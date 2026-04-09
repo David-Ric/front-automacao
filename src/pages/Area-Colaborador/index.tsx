@@ -402,31 +402,68 @@ export default function AreaColaborador() {
     }
   }, []);
 
+  function formatarDataHoraSP(iso: string): string | null {
+    const dt = new Date(iso);
+    if (Number.isNaN(dt.getTime())) return null;
+    const data = dt.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+    const hora = dt.toLocaleTimeString('pt-BR', {
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZone: 'America/Sao_Paulo',
+    });
+    return `${data} ${hora}`;
+  }
+
+  function lerRecebimentoLocal(): { iso: string | null; tabelasComErro: string[] } {
+    try {
+      const iso = localStorage.getItem('@Portal/RecebimentoLocal/ultimoSucessoEm');
+      const raw = localStorage.getItem('@Portal/RecebimentoLocal/tabelasComErro');
+      const tabelasComErro = Array.isArray(JSON.parse(raw || '[]')) ? JSON.parse(raw || '[]') : [];
+      return { iso, tabelasComErro };
+    } catch {
+      return { iso: null, tabelasComErro: [] };
+    }
+  }
+
+  function parseMs(iso: string | null): number {
+    if (!iso) return NaN;
+    const t = new Date(iso).getTime();
+    return Number.isNaN(t) ? NaN : t;
+  }
+
+  async function carregarStatusUltimoRecebimento() {
+    const vendedorId = Number(usuario.username);
+    if (!Number.isFinite(vendedorId) || vendedorId <= 0) return;
+
+    let apiIso: string | null = null;
+    let apiErros: string[] = [];
+    try {
+      const response = await api.get(
+        `/api/Sankhya/RecebimentoLog/ultimo?vendedorId=${vendedorId}`
+      );
+      apiIso = response?.data?.ultimoSucessoEm || response?.data?.ultimoRegistroEm || null;
+      apiErros = Array.isArray(response?.data?.tabelasComErro) ? response.data.tabelasComErro : [];
+    } catch {}
+
+    const local = lerRecebimentoLocal();
+    const apiMs = parseMs(apiIso);
+    const localMs = parseMs(local.iso);
+
+    const usarLocal =
+      Number.isFinite(localMs) && (!Number.isFinite(apiMs) || localMs > apiMs);
+
+    const isoFinal = usarLocal ? local.iso : apiIso;
+    const errosFinal = usarLocal ? local.tabelasComErro : apiErros;
+
+    setTabelasComErroSankhya(Array.isArray(errosFinal) ? errosFinal : []);
+    if (!isoFinal) return;
+    const texto = formatarDataHoraSP(isoFinal);
+    if (texto) setDadosAtualizadosEm(texto);
+  }
+
   useEffect(() => {
     (async () => {
-      try {
-        const vendedorId = Number(usuario.username);
-        if (!Number.isFinite(vendedorId) || vendedorId <= 0) return;
-
-        const response = await api.get(
-          `/api/Sankhya/RecebimentoLog/ultimo?vendedorId=${vendedorId}`
-        );
-        const iso =
-          response?.data?.ultimoSucessoEm || response?.data?.ultimoRegistroEm;
-        const tabelasErro = Array.isArray(response?.data?.tabelasComErro)
-          ? response.data.tabelasComErro
-          : [];
-        setTabelasComErroSankhya(tabelasErro);
-        if (!iso) return;
-
-        const dt = new Date(iso);
-        if (Number.isNaN(dt.getTime())) return;
-        const texto = `${dt.toLocaleDateString('pt-BR')} ${dt.toLocaleTimeString(
-          'pt-BR',
-          { hour: '2-digit', minute: '2-digit' }
-        )}`;
-        setDadosAtualizadosEm(texto);
-      } catch {}
+      await carregarStatusUltimoRecebimento();
     })();
   }, []);
   const { appOnline } = useAppOnlineStatus();
@@ -2232,6 +2269,7 @@ ORDER BY 1,3`;
     setErroSankhya(false);
     erroSankhya = false;
     setAlertErroSankhyaBD(false);
+    setTabelasComErroSankhya([]);
     setDadosRecebidos(false);
     dadosRecebidos = false;
     setSucess(0);
@@ -2249,6 +2287,19 @@ ORDER BY 1,3`;
       const data = (response as any)?.data;
       const resultados = Array.isArray(data?.resultados) ? data.resultados : [];
       const teveErro = resultados.some((r: any) => r && r.sucesso === false);
+      const tabelasErro = Array.from(
+        new Set(
+          resultados
+            .filter((r: any) => r && r.sucesso === false)
+            .map((r: any) =>
+              String(r?.tabela ?? r?.nomeTabela ?? r?.nome ?? r?.tag ?? '')
+                .trim()
+                .replace(/^#/, '')
+            )
+            .filter((t: string) => t.length > 0)
+        )
+      );
+      setTabelasComErroSankhya(tabelasErro);
       if (teveErro) {
         setErroSankhya(true);
         erroSankhya = true;
@@ -2261,6 +2312,19 @@ ORDER BY 1,3`;
       respostaSank = 'Dados Recebidos!';
       setDadosRecebidos(true);
       dadosRecebidos = true;
+      try {
+        const isoNow = new Date().toISOString();
+        localStorage.setItem('@Portal/RecebimentoLocal/ultimoSucessoEm', isoNow);
+        localStorage.setItem(
+          '@Portal/RecebimentoLocal/tabelasComErro',
+          JSON.stringify(tabelasErro)
+        );
+        const texto = formatarDataHoraSP(isoNow);
+        if (texto) setDadosAtualizadosEm(texto);
+      } catch {}
+      try {
+        await carregarStatusUltimoRecebimento();
+      } catch {}
       if (erroSankhya == false) {
         setShowMensageSankhya(false);
       }
@@ -2585,7 +2649,7 @@ ORDER BY 1,3`;
       .post(
         `/api/Sankhya/ReceberDados?tabela=Titulo&vendedorId=${usuario.username}`
       )
-      .then((response) => {
+      .then(async (response) => {
         console.log('Tabela Titulo');
         console.log(response.data);
         setSucess(100);
@@ -2603,6 +2667,20 @@ ORDER BY 1,3`;
           setMsgErroSankhya9(mensagem9.substring(0, 900));
           setTabelarro9('Erro ao receber dados para a tabela Titulo');
         }
+        try {
+          const isoNow = new Date().toISOString();
+          localStorage.setItem('@Portal/RecebimentoLocal/ultimoSucessoEm', isoNow);
+          localStorage.setItem(
+            '@Portal/RecebimentoLocal/tabelasComErro',
+            JSON.stringify(erroSankhya ? tabelasComErroSankhya : [])
+          );
+          const texto = formatarDataHoraSP(isoNow);
+          if (texto) setDadosAtualizadosEm(texto);
+          if (!erroSankhya) setTabelasComErroSankhya([]);
+        } catch {}
+        try {
+          await carregarStatusUltimoRecebimento();
+        } catch {}
         if (erroSankhya == false) {
           setShowMensageSankhya(false);
         }

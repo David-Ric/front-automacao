@@ -71,9 +71,9 @@ export default function Footer() {
           </a>
         </div>
         <div className="Informacoes">
-          <h1 className="portal-footer">Versão Front: {versaoFrontConst} - Data: 05/04/2026</h1>
+          <h1 className="portal-footer">Versão Front: {versaoFrontConst} - Data: 09/04/2026</h1>
           <h1 className="portal-footer">
-            Versão API: 1.1.022 - Data: 05/04/2026
+            Versão API: 1.1.023 - Data: 09/04/2026
           </h1>
         </div>
       </div>

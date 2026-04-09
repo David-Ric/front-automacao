@@ -2355,16 +2355,20 @@ export default function SideNavBar() {
       await transaction.done;
       await db.close();
       finalizarRecebimentoGlobal();
+      setSucess(100);
+      sucess = 100;
       setrespostaSank('Dados Recebidos!');
       respostaSank = 'Dados Recebidos!';
-      const emDigitacao =
-        localStorage.getItem('@Portal/PedidoEmDigitacao') === 'true';
-      const onPedido = String(window.location.pathname || '')
-        .toLowerCase()
-        .includes('pedido');
-      if (!(emDigitacao && onPedido)) {
+      try {
+        localStorage.setItem(
+          '@Portal/RecebimentoLocal/ultimoSucessoEm',
+          new Date().toISOString()
+        );
+        localStorage.setItem('@Portal/RecebimentoLocal/tabelasComErro', '[]');
+      } catch {}
+      setTimeout(() => {
         window.location.reload();
-      }
+      }, 800);
     }
   }
 

@@ -1167,7 +1167,13 @@ async function popularProd(produto: iproduto[]) {
     } finally {
       await transaction.done;
       await db.close();
-
+      try {
+        localStorage.setItem(
+          '@Portal/RecebimentoLocal/ultimoSucessoEm',
+          new Date().toISOString()
+        );
+        localStorage.setItem('@Portal/RecebimentoLocal/tabelasComErro', '[]');
+      } catch {}
       window.location.reload();
     }
   }
@@ -2864,7 +2870,13 @@ async function popularProd(produto: iproduto[]) {
     } finally {
       await transaction.done;
       await db.close();
-
+      try {
+        localStorage.setItem(
+          '@Portal/RecebimentoLocal/ultimoSucessoEm',
+          new Date().toISOString()
+        );
+        localStorage.setItem('@Portal/RecebimentoLocal/tabelasComErro', '[]');
+      } catch {}
       window.location.reload();
     }
   }
