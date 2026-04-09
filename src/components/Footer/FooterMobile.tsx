@@ -1800,7 +1800,7 @@ async function popularProd(produto: iproduto[]) {
     setrespostaSank('Verificando conexão...');
     respostaSank = 'Verificando conexão...';
     try {
-      await receberDadosSankhyaVendedor();
+      await VerificaRepresentante();
     } catch (error) {
       setLoading(false);
       if (isMobile) {
@@ -1812,6 +1812,78 @@ async function popularProd(produto: iproduto[]) {
         setShowMensageSankhyaErro(true);
       }
     }
+  }
+
+  async function receberDadosSankhyaLote() {
+    const tabelas = [
+      'Vendedor',
+      'TipoNegociacao',
+      'Parceiro',
+      'GrupoProduto',
+      'Produto',
+      'TabelaPreco',
+      'TabelaPrecoAdicional',
+      'ItemTabela',
+      'TabelaPrecoParceiro',
+      'Titulo',
+    ];
+    const passos = [
+      { msg: 'Atualizando Vendedor...', p: 10 },
+      { msg: 'Atualizando TipoNegociacao...', p: 20 },
+      { msg: 'Atualizando Parceiro...#FooterMobile', p: 30 },
+      { msg: 'Atualizando GrupoProduto...', p: 40 },
+      { msg: 'Atualizando Produto...', p: 50 },
+      { msg: 'Atualizando TabelaPreco...', p: 60 },
+      { msg: 'Atualizando TabelaPrecoAdicional...', p: 70 },
+      { msg: 'Atualizando ItemTabela...', p: 80 },
+      { msg: 'Atualizando TabelaPrecoParceiro...', p: 90 },
+      { msg: 'Atualizando Titulo...', p: 100 },
+    ];
+    let idx = 0;
+    setSucess(passos[idx].p);
+    sucess = passos[idx].p;
+    setrespostaSank(passos[idx].msg);
+    respostaSank = passos[idx].msg;
+    const intervalId = window.setInterval(() => {
+      if (idx >= passos.length - 1) {
+        try {
+          window.clearInterval(intervalId);
+        } catch {}
+        return;
+      }
+      idx += 1;
+      const step = passos[idx];
+      setSucess(step.p);
+      sucess = step.p;
+      setrespostaSank(step.msg);
+      respostaSank = step.msg;
+    }, 1200);
+    try {
+      const response = await api.post(
+        `/api/Sankhya/ReceberDadosLote?vendedorId=${usuario.username}&tabelas=${encodeURIComponent(
+          tabelas.join(',')
+        )}`
+      );
+      const data = (response as any)?.data;
+      const resultados = Array.isArray(data?.resultados) ? data.resultados : [];
+      const teveErro = resultados.some((r: any) => r && r.sucesso === false);
+      if (teveErro) {
+        setErroSankhya(true);
+        erroSankhya = true;
+      }
+    } catch {
+      setErroSankhya(true);
+      erroSankhya = true;
+    } finally {
+      try {
+        window.clearInterval(intervalId);
+      } catch {}
+    }
+    setrespostaSank('Verificando dados a serem inclusos no banco...');
+    respostaSank = 'Verificando dados a serem inclusos no banco...';
+    await new Promise((r) => setTimeout(r, 400));
+    setrespostaSank('Inserindo dados no banco local...');
+    respostaSank = 'Inserindo dados no banco local...';
   }
 
   async function receberDadosSankhyaVendedor() {
@@ -1861,19 +1933,25 @@ async function popularProd(produto: iproduto[]) {
   async function VerificaRepresentante() {
     await api
       .get(`/api/Vendedor/${usuario.username}`)
-      .then((response) => {
+      .then(async (response) => {
         console.log(
           'dados do vendedor.........................',
           response.data.tipo
         );
         if (response.data.tipo == 'R' || response.data.tipo == 'V') {
-          receberDadosSankhyaTipoNegociacao();
+          await receberDadosSankhyaLote();
+          await GetParceiro();
         } else {
           setAlertErroSankhya(true);
           setMsgErro('Erro ao receber dados Sankhya, erro de conexão!');
+          finalizarRecebimentoGlobal();
         }
       })
-      .catch((error) => {});
+      .catch((error) => {
+        setAlertErroSankhya(true);
+        setMsgErro('Erro ao receber dados Sankhya, erro de conexão!');
+        finalizarRecebimentoGlobal();
+      });
   }
 
   async function receberDadosSankhyaTipoNegociacao() {
@@ -2433,6 +2511,24 @@ async function popularProd(produto: iproduto[]) {
     atualizadoEm: string;
   }
 
+  async function replaceStoreInChunks(
+    store: any,
+    rows: any[],
+    options?: { chunkSize?: number; beforeWrite?: (row: any, index: number) => void }
+  ) {
+    const chunkSize = Math.max(1, Number(options?.chunkSize ?? 500));
+    await store.clear();
+    for (let start = 0; start < rows.length; start += chunkSize) {
+      const chunk = rows.slice(start, start + chunkSize);
+      if (options?.beforeWrite) {
+        for (let i = 0; i < chunk.length; i++) {
+          options.beforeWrite(chunk[i], start + i);
+        }
+      }
+      await Promise.all(chunk.map((row: any) => store.put(row)));
+    }
+  }
+
   async function popularParceiro(parceiros: iParceiro[]) {
     const dataPedidoAtual = new Date();
     const ano = dataPedidoAtual.getFullYear();
@@ -2447,22 +2543,12 @@ async function popularProd(produto: iproduto[]) {
     const store = transaction.objectStore('parceiro');
 
     try {
-      await store.clear();
-
-      for (const parceiro of parceiros) {
-        parceiro.atualizadoEm = dataPedidoNovo;
-        await store.add(parceiro);
-      }
-
-      const registrosInseridos = await store.count();
-
-      if (registrosInseridos !== parceiros.length) {
-        await store.clear();
-        for (const parceiro of parceiros) {
+      await replaceStoreInChunks(store, parceiros as any[], {
+        chunkSize: 500,
+        beforeWrite: (parceiro) => {
           parceiro.atualizadoEm = dataPedidoNovo;
-          await store.add(parceiro);
-        }
-      }
+        },
+      });
     } catch (error) {
       console.error('Erro ao popular dados:', error);
       setrespostaSank('Erro ao popular dados.');
@@ -2499,17 +2585,7 @@ async function popularProd(produto: iproduto[]) {
     const transaction = db.transaction('titulo', 'readwrite');
     const store = transaction.objectStore('titulo');
     try {
-      await store.clear();
-      for (const t of titulo) {
-        await store.add(t);
-      }
-      const registrosInseridos = await store.count();
-      if (registrosInseridos !== titulo.length) {
-        await store.clear();
-        for (const t of titulo) {
-          await store.add(t);
-        }
-      }
+      await replaceStoreInChunks(store, titulo as any[], { chunkSize: 500 });
     } catch {} finally {
       await transaction.done;
       await db.close();
@@ -2522,20 +2598,7 @@ async function popularProd(produto: iproduto[]) {
     const store = transaction.objectStore('tipoNegociacao');
 
     try {
-      await store.clear();
-
-      for (const tipo of tipos) {
-        await store.add(tipo);
-      }
-
-      const registrosInseridos = await store.count();
-
-      if (registrosInseridos !== tipos.length) {
-        await store.clear();
-        for (const tipo of tipos) {
-          await store.add(tipo);
-        }
-      }
+      await replaceStoreInChunks(store, tipos as any[], { chunkSize: 500 });
     } catch (error) {
       console.error('Erro ao popular dados:', error);
       setrespostaSank('Erro ao popular dados.');
@@ -2559,20 +2622,7 @@ async function popularProd(produto: iproduto[]) {
     const store = transaction.objectStore('grupoProduto');
 
     try {
-      await store.clear();
-
-      for (const grupo of grupoProduto) {
-        await store.add(grupo);
-      }
-
-      const registrosInseridos = await store.count();
-
-      if (registrosInseridos !== grupoProduto.length) {
-        await store.clear();
-        for (const grupo of grupoProduto) {
-          await store.add(grupo);
-        }
-      }
+      await replaceStoreInChunks(store, grupoProduto as any[], { chunkSize: 500 });
     } catch (error) {
       console.error('Erro ao popular dados:', error);
       setrespostaSank('Erro ao popular dados.');
@@ -2607,20 +2657,7 @@ async function popularProd(produto: iproduto[]) {
     const transaction = db.transaction('produto', 'readwrite');
     const store = transaction.objectStore('produto');
     try {
-      await store.clear();
-
-      for (const prod of produto) {
-        await store.add(prod);
-      }
-
-      const registrosInseridos = await store.count();
-
-      if (registrosInseridos !== produto.length) {
-        await store.clear();
-        for (const prod of produto) {
-          await store.add(prod);
-        }
-      }
+      await replaceStoreInChunks(store, produto as any[], { chunkSize: 500 });
     } catch (error) {
       console.error('Erro ao popular dados:', error);
       setrespostaSank('Erro ao popular dados.');
@@ -2636,17 +2673,7 @@ async function popularProd(produto: iproduto[]) {
     const transaction = db.transaction('tabelaPreco', 'readwrite');
     const store = transaction.objectStore('tabelaPreco');
     try {
-      await store.clear();
-      for (const tabela of tabelaPreco) {
-        await store.add(tabela);
-      }
-      const registrosInseridos = await store.count();
-      if (registrosInseridos !== tabelaPreco.length) {
-        await store.clear();
-        for (const tabela of tabelaPreco) {
-          await store.add(tabela);
-        }
-      }
+      await replaceStoreInChunks(store, tabelaPreco as any[], { chunkSize: 250 });
     } catch (error) {
       console.error('Erro ao popular dados:', error);
       setrespostaSank('Erro ao popular dados.');
@@ -2728,20 +2755,7 @@ async function popularProd(produto: iproduto[]) {
     const store = transaction.objectStore('itemTabela');
 
     try {
-      await store.clear();
-
-      for (const tabela of itemTabela) {
-        await store.add(tabela);
-      }
-
-      const registrosInseridos = await store.count();
-
-      if (registrosInseridos !== itemTabela.length) {
-        await store.clear();
-        for (const tabela of itemTabela) {
-          await store.add(tabela);
-        }
-      }
+      await replaceStoreInChunks(store, itemTabela as any[], { chunkSize: 500 });
     } catch (error) {
       console.error('Erro ao popular dados:', error);
       setrespostaSank('Erro ao popular dados.');
@@ -2806,20 +2820,9 @@ async function popularProd(produto: iproduto[]) {
     const store = transaction.objectStore('tabelaPrecoParceiro');
 
     try {
-      await store.clear();
-
-      for (const tabela of tabelaPrecoParceiro) {
-        await store.add(tabela);
-      }
-
-      const registrosInseridos = await store.count();
-
-      if (registrosInseridos !== tabelaPrecoParceiro.length) {
-        await store.clear();
-        for (const tabela of tabelaPrecoParceiro) {
-          await store.add(tabela);
-        }
-      }
+      await replaceStoreInChunks(store, tabelaPrecoParceiro as any[], {
+        chunkSize: 250,
+      });
     } catch (error) {
       console.error('Erro ao popular dados:', error);
       setrespostaSank('Erro ao popular dados.');
@@ -2849,20 +2852,7 @@ async function popularProd(produto: iproduto[]) {
     const store = transaction.objectStore('tabelaPrecoAdicional');
 
     try {
-      await store.clear();
-
-      for (const tabela of tabelaAdicional) {
-        await store.add(tabela);
-      }
-
-      const registrosInseridos = await store.count();
-
-      if (registrosInseridos !== tabelaAdicional.length) {
-        await store.clear();
-        for (const tabela of tabelaAdicional) {
-          await store.add(tabela);
-        }
-      }
+      await replaceStoreInChunks(store, tabelaAdicional as any[], { chunkSize: 500 });
     } catch (error) {
       console.error('Erro ao popular dados:', error);
       setrespostaSank('Erro ao popular dados.');

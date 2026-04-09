@@ -5217,6 +5217,24 @@ WHERE PRO.CODPROD <> 0 AND PRO.USOPROD IN ('V','R')`;
     } catch {}
   }
 
+  async function replaceStoreInChunks(
+    store: any,
+    rows: any[],
+    options?: { chunkSize?: number; beforeWrite?: (row: any, index: number) => void }
+  ) {
+    const chunkSize = Math.max(1, Number(options?.chunkSize ?? 500));
+    await store.clear();
+    for (let start = 0; start < rows.length; start += chunkSize) {
+      const chunk = rows.slice(start, start + chunkSize);
+      if (options?.beforeWrite) {
+        for (let i = 0; i < chunk.length; i++) {
+          options.beforeWrite(chunk[i], start + i);
+        }
+      }
+      await Promise.all(chunk.map((row: any) => store.put(row)));
+    }
+  }
+
   async function popularParceiroApi(parceiros: any[]) {
     const dataPedidoAtual = new Date();
     const ano = dataPedidoAtual.getFullYear();
@@ -5231,19 +5249,12 @@ WHERE PRO.CODPROD <> 0 AND PRO.USOPROD IN ('V','R')`;
     const transaction = db.transaction('parceiro', 'readwrite');
     const store = transaction.objectStore('parceiro');
     try {
-      await store.clear();
-      for (const parceiro of parceiros) {
-        if (parceiro) parceiro.atualizadoEm = dataPedidoNovo;
-        await store.add(parceiro);
-      }
-      const registrosInseridos = await store.count();
-      if (registrosInseridos !== parceiros.length) {
-        await store.clear();
-        for (const parceiro of parceiros) {
+      await replaceStoreInChunks(store, parceiros as any[], {
+        chunkSize: 500,
+        beforeWrite: (parceiro) => {
           if (parceiro) parceiro.atualizadoEm = dataPedidoNovo;
-          await store.add(parceiro);
-        }
-      }
+        },
+      });
     } finally {
       await transaction.done;
       await db.close();
@@ -5274,17 +5285,7 @@ WHERE PRO.CODPROD <> 0 AND PRO.USOPROD IN ('V','R')`;
     const transaction = db.transaction('titulo', 'readwrite');
     const store = transaction.objectStore('titulo');
     try {
-      await store.clear();
-      for (const t of titulo) {
-        await store.add(t);
-      }
-      const registrosInseridos = await store.count();
-      if (registrosInseridos !== titulo.length) {
-        await store.clear();
-        for (const t of titulo) {
-          await store.add(t);
-        }
-      }
+      await replaceStoreInChunks(store, titulo as any[], { chunkSize: 500 });
     } finally {
       await transaction.done;
       await db.close();
@@ -5296,17 +5297,7 @@ WHERE PRO.CODPROD <> 0 AND PRO.USOPROD IN ('V','R')`;
     const transaction = db.transaction('tipoNegociacao', 'readwrite');
     const store = transaction.objectStore('tipoNegociacao');
     try {
-      await store.clear();
-      for (const tipo of tipos) {
-        await store.add(tipo);
-      }
-      const registrosInseridos = await store.count();
-      if (registrosInseridos !== tipos.length) {
-        await store.clear();
-        for (const tipo of tipos) {
-          await store.add(tipo);
-        }
-      }
+      await replaceStoreInChunks(store, tipos as any[], { chunkSize: 500 });
     } finally {
       await transaction.done;
       await db.close();
@@ -5318,17 +5309,7 @@ WHERE PRO.CODPROD <> 0 AND PRO.USOPROD IN ('V','R')`;
     const transaction = db.transaction('grupoProduto', 'readwrite');
     const store = transaction.objectStore('grupoProduto');
     try {
-      await store.clear();
-      for (const grupo of grupoProduto) {
-        await store.add(grupo);
-      }
-      const registrosInseridos = await store.count();
-      if (registrosInseridos !== grupoProduto.length) {
-        await store.clear();
-        for (const grupo of grupoProduto) {
-          await store.add(grupo);
-        }
-      }
+      await replaceStoreInChunks(store, grupoProduto as any[], { chunkSize: 500 });
     } finally {
       await transaction.done;
       await db.close();
@@ -5340,17 +5321,7 @@ WHERE PRO.CODPROD <> 0 AND PRO.USOPROD IN ('V','R')`;
     const transaction = db.transaction('produto', 'readwrite');
     const store = transaction.objectStore('produto');
     try {
-      await store.clear();
-      for (const prod of produto) {
-        await store.add(prod);
-      }
-      const registrosInseridos = await store.count();
-      if (registrosInseridos !== produto.length) {
-        await store.clear();
-        for (const prod of produto) {
-          await store.add(prod);
-        }
-      }
+      await replaceStoreInChunks(store, produto as any[], { chunkSize: 500 });
     } finally {
       await transaction.done;
       await db.close();
@@ -5362,17 +5333,7 @@ WHERE PRO.CODPROD <> 0 AND PRO.USOPROD IN ('V','R')`;
     const transaction = db.transaction('tabelaPreco', 'readwrite');
     const store = transaction.objectStore('tabelaPreco');
     try {
-      await store.clear();
-      for (const tabela of tabelaPreco) {
-        await store.add(tabela);
-      }
-      const registrosInseridos = await store.count();
-      if (registrosInseridos !== tabelaPreco.length) {
-        await store.clear();
-        for (const tabela of tabelaPreco) {
-          await store.add(tabela);
-        }
-      }
+      await replaceStoreInChunks(store, tabelaPreco as any[], { chunkSize: 250 });
     } finally {
       await transaction.done;
       await db.close();
@@ -5384,17 +5345,7 @@ WHERE PRO.CODPROD <> 0 AND PRO.USOPROD IN ('V','R')`;
     const transaction = db.transaction('itemTabela', 'readwrite');
     const store = transaction.objectStore('itemTabela');
     try {
-      await store.clear();
-      for (const item of itemTabela) {
-        await store.add(item);
-      }
-      const registrosInseridos = await store.count();
-      if (registrosInseridos !== itemTabela.length) {
-        await store.clear();
-        for (const item of itemTabela) {
-          await store.add(item);
-        }
-      }
+      await replaceStoreInChunks(store, itemTabela as any[], { chunkSize: 500 });
     } finally {
       await transaction.done;
       await db.close();
@@ -5406,17 +5357,9 @@ WHERE PRO.CODPROD <> 0 AND PRO.USOPROD IN ('V','R')`;
     const transaction = db.transaction('tabelaPrecoParceiro', 'readwrite');
     const store = transaction.objectStore('tabelaPrecoParceiro');
     try {
-      await store.clear();
-      for (const tabela of tabelaPrecoParceiro) {
-        await store.add(tabela);
-      }
-      const registrosInseridos = await store.count();
-      if (registrosInseridos !== tabelaPrecoParceiro.length) {
-        await store.clear();
-        for (const tabela of tabelaPrecoParceiro) {
-          await store.add(tabela);
-        }
-      }
+      await replaceStoreInChunks(store, tabelaPrecoParceiro as any[], {
+        chunkSize: 250,
+      });
     } finally {
       await transaction.done;
       await db.close();
@@ -5438,17 +5381,7 @@ WHERE PRO.CODPROD <> 0 AND PRO.USOPROD IN ('V','R')`;
     const transaction = db.transaction('tabelaPrecoAdicional', 'readwrite');
     const store = transaction.objectStore('tabelaPrecoAdicional');
     try {
-      await store.clear();
-      for (const tabela of tabelaAdicional) {
-        await store.add(tabela);
-      }
-      const registrosInseridos = await store.count();
-      if (registrosInseridos !== tabelaAdicional.length) {
-        await store.clear();
-        for (const tabela of tabelaAdicional) {
-          await store.add(tabela);
-        }
-      }
+      await replaceStoreInChunks(store, tabelaAdicional as any[], { chunkSize: 500 });
     } finally {
       await transaction.done;
       await db.close();
